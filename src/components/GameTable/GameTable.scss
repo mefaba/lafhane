@@ -1,0 +1,26 @@
+.game_container{
+    background-color: rgb(145, 88, 88);
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    .game_container_inner{
+        background-color: red;
+        display: grid;
+        grid-template-columns: 100px 100px 100px 100px;
+        grid-template-rows: 100px 100px 100px 100px; 
+        column-gap: 10px;
+        row-gap: 15px;
+        .game_chars{
+            
+            /* margin: auto; */
+            font-size: 24px;
+            background-color: rgb(131, 129, 129);
+        }
+    }
+    .game_answer{
+        margin: 50px;
+    }
+}
