@@ -12,8 +12,8 @@ const GameTableUnit = () => {
         /* console.log(currentAnswer) */
     }
     const handleAnswer = () => {
-        console.log(currentAnswer)
-        if(data_validAnswers.includes(currentAnswer)){
+        /* console.log(currentAnswer) */
+        if(data_validAnswers.includes(currentAnswer) && !correctAnswers.includes(currentAnswer)){
             console.log("Congrats")
             setCorrectAnswers([...correctAnswers,currentAnswer])
             setCurrentAnswer("")
@@ -25,7 +25,7 @@ const GameTableUnit = () => {
 			<div className="game_container_inner">
                 {
                     data_tableChars.split("").map((char,index)=>{
-                        return<div key={index} className="game_chars">{char.toUpperCase()}</div>
+                        return<div key={index} className="game_chars">{char}</div>
                     })
                 }
 			</div>
