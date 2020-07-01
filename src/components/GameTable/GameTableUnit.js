@@ -25,13 +25,13 @@ const GameTableUnit = () => {
 			<div className="game_container_inner">
                 {
                     data_tableChars.split("").map((char,index)=>{
-                        return<div key={index} className="game_chars">{char}</div>
+                        return<div key={index} className="game_chars"><p>{char}</p></div>
                     })
                 }
 			</div>
 
             <div className="game_correct_answers">
-                Answers
+                <p>Doğru Cevaplar</p>
             {correctAnswers.length?correctAnswers.map((answer,index)=>(<div key={index}>{answer}</div>)):null}
             </div>
 
