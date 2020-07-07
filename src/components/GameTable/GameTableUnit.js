@@ -1,11 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "./GameTable.scss";
 
 const GameTableUnit = () => {
-    const data_tableChars = "aedhaümksbecfite"
-    const data_validAnswers=["sit","bek","cet","asi","bet","met","dem","kem","ece","tek","eti","ket","tem","fit","bas","sif","bit","cem","ekme","beis","emek","deme","süet","düet","sabi","site","kete","keme","asit","beti","abis","emet","etek","sübek","tebaa","emcek","demek","metis","basit","sümek","demet","bitek","sabit","tekme","abece","sitem","ecet","sabite","isabet"]
+    const data_tableChars = "irpnnsiletbfooie"
+    //const data_validAnswers=["sit","bek","cet","asi","bet","met","dem","kem","ece","tek","eti","ket","tem","fit","bas","sif","bit","cem","ekme","beis","emek","deme","süet","düet","sabi","site","kete","keme","asit","beti","abis","emet","etek","sübek","tebaa","emcek","demek","metis","basit","sümek","demet","bitek","sabit","tekme","abece","sitem","ecet","sabite","isabet"]
     const [correctAnswers, setCorrectAnswers] = useState([])
     const [currentAnswer, setCurrentAnswer] = useState("")
+    //const [data_tableChars, setDatatableChars] = useState("")
+    const [data_validAnswers, setValidAnswers] = useState("")
+
+    useEffect(() => {
+        axios.get(`http://localhost:3000/`).then(res=>setValidAnswers(res.data["irpnnsiletbfooie"]))
+    }, [])
 
     const handleChange = (e) => {
         setCurrentAnswer(e.target.value)
