@@ -1,17 +1,29 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import io from 'socket.io-client';
+/* import axios from "axios"; */
 import "./GameTable.scss";
 
 const GameTableUnit = () => {
-    const data_tableChars = "irpnnsiletbfooie"
+    /* const data_tableChars = "irpnnsiletbfooie" */
     //const data_validAnswers=["sit","bek","cet","asi","bet","met","dem","kem","ece","tek","eti","ket","tem","fit","bas","sif","bit","cem","ekme","beis","emek","deme","süet","düet","sabi","site","kete","keme","asit","beti","abis","emet","etek","sübek","tebaa","emcek","demek","metis","basit","sümek","demet","bitek","sabit","tekme","abece","sitem","ecet","sabite","isabet"]
     const [correctAnswers, setCorrectAnswers] = useState([])
     const [currentAnswer, setCurrentAnswer] = useState("")
-    //const [data_tableChars, setDatatableChars] = useState("")
+    const [data_tableChars, setDatatableChars] = useState("")
     const [data_validAnswers, setValidAnswers] = useState("")
 
+    //Getting Server-side Data
+    
     useEffect(() => {
-        axios.get(`http://localhost:3000/`).then(res=>setValidAnswers(res.data["irpnnsiletbfooie"]))
+        const socket = io("http://localhost:5000/");
+
+        socket.on('LAF_API', (response)=>{
+            console.log(response)
+            const dataKeys = Object.keys(response);//returns list of keys, in our case there will be always one, so we take the first in next line
+            setDatatableChars(dataKeys[0])
+            const dataValues = Object.values(response);//returns list of value, in our case there will be always one, so we take the first in next line
+            setValidAnswers(dataValues[0])
+        })
+        /* axios.get(`http://localhost:5000/`).then(res=>setValidAnswers(res.data["irpnnsiletbfooie"])) */
     }, [])
 
     const handleChange = (e) => {

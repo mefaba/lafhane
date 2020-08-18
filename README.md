@@ -1,8 +1,13 @@
 ### İmprove
 
--will be multiplayer
--user scores
--algortyhm for continous table creation. Trio and DFS combination seems like the way I need to go and learn.,
--database
+-Issue1: socket.emit interval 3000 / Backend
+
+-Issue2: Top Leaderboard / Client-side => ask username, Server-side => check if it exists in DB
+
+-Issue3: User Point / Client-side
+
+-Issue4: Not-finded answer list / Client Side
+
+-Issue5: Clear Correct Answer List after 15 sec(results of 3 minute table) / Client Side
 
 
