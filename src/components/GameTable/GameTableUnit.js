@@ -4,16 +4,17 @@ import io from 'socket.io-client';
 import "./GameTable.scss";
 
 const GameTableUnit = () => {
-    /* const data_tableChars = "irpnnsiletbfooie" */
-    //const data_validAnswers=["sit","bek","cet","asi","bet","met","dem","kem","ece","tek","eti","ket","tem","fit","bas","sif","bit","cem","ekme","beis","emek","deme","süet","düet","sabi","site","kete","keme","asit","beti","abis","emet","etek","sübek","tebaa","emcek","demek","metis","basit","sümek","demet","bitek","sabit","tekme","abece","sitem","ecet","sabite","isabet"]
+    const data_tableChars = "irpnnsiletbfooie"
+    const data_validAnswers=["sit","bek","cet","asi","bet","met","dem","kem","ece","tek","eti","ket","tem","fit","bas","sif","bit","cem","ekme","beis","emek","deme","süet","düet","sabi","site","kete","keme","asit","beti","abis","emet","etek","sübek","tebaa","emcek","demek","metis","basit","sümek","demet","bitek","sabit","tekme","abece","sitem","ecet","sabite","isabet"]
     const [correctAnswers, setCorrectAnswers] = useState([])
     const [currentAnswer, setCurrentAnswer] = useState("")
-    const [data_tableChars, setDatatableChars] = useState("")
-    const [data_validAnswers, setValidAnswers] = useState("")
+    const [point, setPoint] = useState(0)
+    //const [data_tableChars, setDatatableChars] = useState("")
+    //const [data_validAnswers, setValidAnswers] = useState("")
 
     //Getting Server-side Data
     
-    useEffect(() => {
+    /* useEffect(() => {
         const socket = io("http://localhost:5000/");
 
         socket.on('LAF_API', (response)=>{
@@ -23,8 +24,12 @@ const GameTableUnit = () => {
             const dataValues = Object.values(response);//returns list of value, in our case there will be always one, so we take the first in next line
             setValidAnswers(dataValues[0])
         })
-        /* axios.get(`http://localhost:5000/`).then(res=>setValidAnswers(res.data["irpnnsiletbfooie"])) */
-    }, [])
+        //axios.get(`http://localhost:5000/`).then(res=>setValidAnswers(res.data["irpnnsiletbfooie"]))
+    }, []) */
+
+    const sendPointToAPI = () => {
+        
+    }
 
     const handleChange = (e) => {
         setCurrentAnswer(e.target.value)
@@ -35,6 +40,7 @@ const GameTableUnit = () => {
         if(data_validAnswers.includes(currentAnswer) && !correctAnswers.includes(currentAnswer)){
             console.log("Congrats")
             setCorrectAnswers([...correctAnswers,currentAnswer])
+            setPoint(point + currentAnswer.length + currentAnswer.length - 3) //Points calculates as follows => length,point = 3,3 / 4,5 / 5,7 / 6,9 / 7,11 / 8,13 / 9,15 / 10,17 
             setCurrentAnswer("")
         }
         /* setCorrectAnswers(e.target.value) */
@@ -50,6 +56,9 @@ const GameTableUnit = () => {
 			</div>
 
             <div className="game_correct_answers">
+                <div>
+                    Puan: {point}
+                </div>
                 <p>Doğru Cevaplar</p>
             {correctAnswers.length?correctAnswers.map((answer,index)=>(<div key={index}>{answer}</div>)):null}
             </div>
