@@ -1,12 +1,17 @@
 import React from 'react'
 import "./GameIntro.scss"
 import { useState } from 'react'
+import axios from 'axios'
+import { useContext } from 'react'
+import { GameContext } from '../../context/GameContext'
+
 
 function GameIntroUnit({setIsStarted}) {
-    const [username, setUsername] = useState("")
+    const {username, setUsername} = useContext(GameContext)
+
     const  sendUsernameToAPI = () =>{
-        console.log("building")
-        //axios.post(`http://localhost:5000/`) //then if response is positive setIsStarted => True / Else if negative ask new user name
+        axios.post(`http://localhost:5000/api/users`,{"username": username })//then if response is positive setIsStarted => True / Else if negative ask new user name
+        .then(res=>console.log(res)) 
     }
     const handleStart = () =>{
         if(username.length > 3 && username.length <11){

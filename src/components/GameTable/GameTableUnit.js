@@ -28,7 +28,7 @@ const GameTableUnit = () => {
 
             //Clear Answers&Points for Next Turn
             setCorrectAnswers([])
-            if(currentStage==="GameStage"){setPoint(0)}
+            if(currentStage==="gameStage"){setPoint(0)}
             
         })
     }

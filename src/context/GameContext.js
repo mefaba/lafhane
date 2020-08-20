@@ -5,6 +5,7 @@ export const GameContext = React.createContext();
 
 const GameProvider = (props) => {
     const [currentStage, setCurrentStage]= useState("gameStage") //gameStage & resultStage
+    const [username, setUsername] = useState("")
     /* const [data_tableChars, setDatatableChars] = useState("")
     const [data_validAnswers, setValidAnswers] = useState("") */
 
@@ -21,7 +22,7 @@ const GameProvider = (props) => {
     } */
 
 	return (
-		<GameContext.Provider value={{currentStage, setCurrentStage}}>
+		<GameContext.Provider value={{currentStage, setCurrentStage, username, setUsername}}>
 			{props.children}
 		</GameContext.Provider>
 	);
