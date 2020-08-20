@@ -41,6 +41,8 @@
         border-radius: 10px;
         background-color: rgb(111, 201, 255);
         text-align: center;
+        overflow: scroll;
+        overflow-x: hidden;
     }
     .game_input_answer{
         margin: 50px;
