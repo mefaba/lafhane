@@ -19,7 +19,7 @@ const CountDownUnit = ({fetch_game_data, fetch_total_point}) => {
                 if(remainingTime > 0){
                     return remainingTime-1
                 }else if(remainingTime===0){
-                    axios.get(`http://localhost:5000/api/remainingtime`).then((response)=> {
+                    axios.get(`${process.env.REACT_APP_ACTIVESERVER}/api/remainingtime`).then((response)=> {
                         if(response.data.currentStage==="gameStage"){
                             setCurrentStage(response.data.currentStage)
                             //trigger game fetch data
