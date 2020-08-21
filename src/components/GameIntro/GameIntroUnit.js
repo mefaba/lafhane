@@ -10,7 +10,7 @@ function GameIntroUnit({ setIsStarted }) {
 	const [message, setMessage] = useState("");
 
 	const sendUsernameToAPI = () => {
-		axios.post(`http://localhost:5000/api/users`, { username: username }).then(({ data }) => {
+		axios.post(`${process.env.REACT_APP_ACTIVESERVER}/api/users`, { username: username }).then(({ data }) => {
 			//then if response is positive setIsStarted => True / Else if negative ask new user name
 			if (data) {
 				setIsStarted(false);

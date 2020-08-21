@@ -20,7 +20,7 @@ const GameTableUnit = () => {
     
 	//Getting Server-side Data
 	const fetch_game_data = async () => {
-		await axios.get(`http://localhost:5000/api/gametable`).then((res) => {
+		await axios.get(`${process.env.REACT_APP_ACTIVESERVER}/api/gametable`).then((res) => {
 			const response = res.data.currentData;
 			const dataKeys = Object.keys(response); //returns list of keys, in our case there will be always one, so we take the first in next line
 			setDatatableChars(dataKeys[0]);
@@ -41,7 +41,7 @@ const GameTableUnit = () => {
     useEffect(()=>{
         if(currentStage === "resultStage"){
             //console.log("Result aşamasında ve backende gönderildi, puanın: " + point);
-            axios.put(`http://localhost:5000/api/scores/${username}`, { "point": point });
+            axios.put(`${process.env.REACT_APP_ACTIVESERVER}/api/scores/${username}`, { "point": point });
         }
     // eslint-disable-next-line
     },[currentStage])
@@ -52,7 +52,7 @@ const GameTableUnit = () => {
     }, [])  */
 
 	useEffect(() => {
-		const socket = io("http://localhost:5000/");
+		const socket = io(`${process.env.REACT_APP_ACTIVESERVER}/`);
 		socket.emit("join", { username });
 		/* socket.on('LAF_API', (response)=>{
             console.log(response)

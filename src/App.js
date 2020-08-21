@@ -8,7 +8,8 @@ import LeaderBoardUnit from "./components/LeaderBoard/LeaderBoardUnit";
 
 function App() {
   const [isStarted, setIsStarted] = useState(false);
-
+  
+  
 	return (
 		<div className="App">
 			<NavbarUnit />

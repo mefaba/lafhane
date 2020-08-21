@@ -13,7 +13,7 @@ function LeaderBoardUnit() {
 		//if (currentStage === "resultStage" || isFirstGame) {
             /* setIsFirstGame(false) */
 			//axios get leaderboard
-			axios.get("http://localhost:5000/api/scores/leaderboard").then((res) => {
+			axios.get(`${process.env.REACT_APP_ACTIVESERVER}/api/scores/leaderboard`).then((res) => {
 				let data = res.data;
 				setLeaderboard(data);
 				//console.log(res.data);
