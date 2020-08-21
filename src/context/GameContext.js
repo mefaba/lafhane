@@ -1,11 +1,12 @@
-import React, { useState, useContext } from "react";
-import axios from "axios";
+import React, { useState } from "react";
+/* import axios from "axios"; */
 
 export const GameContext = React.createContext();
 
 const GameProvider = (props) => {
     const [currentStage, setCurrentStage]= useState("gameStage") //gameStage & resultStage
     const [username, setUsername] = useState("")
+   
     /* const [data_tableChars, setDatatableChars] = useState("")
     const [data_validAnswers, setValidAnswers] = useState("") */
 

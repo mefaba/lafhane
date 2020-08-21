@@ -1,0 +1,24 @@
+.leaderboard_container{
+    position: absolute;
+    height: 50vh;
+    width: 200px;
+    top: 15%;
+    left: 10px;
+    border-radius: 10px;
+    background-color: rgb(187, 176, 79);
+    text-align: center;
+    overflow: scroll;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    z-index: 2;
+
+    .leaderboard_container_inner{
+        margin-right: 5px;
+        margin-left: 5px;
+        .leaderboard_rows{
+            display: flex;
+            justify-content: space-between;
+            
+        }
+    }
+}

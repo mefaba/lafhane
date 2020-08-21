@@ -5,11 +5,13 @@ import { useState } from 'react'
 import { useContext } from 'react'
 import { GameContext } from '../../context/GameContext'
 
-const CountDownUnit = ({fetch_game_data}) => {
+const CountDownUnit = ({fetch_game_data, fetch_total_point}) => {
     const {setCurrentStage}= useContext(GameContext)
     const [remainingTime, setRemainingTime] = useState(0)
     const minutes = Math.floor(remainingTime/60) || 0
     const seconds = remainingTime%60 || 0
+
+
 
     useEffect(()=>{
         const myInterval = setInterval(() => {
@@ -26,12 +28,15 @@ const CountDownUnit = ({fetch_game_data}) => {
                         }else if(response.data.currentStage==="resultStage"){
                             setCurrentStage(response.data.currentStage)
                             setRemainingTime(response.data.resultTime)
+            
                             
                         }
                     })
                 }
             });
           }, 1000);
+          return () => clearInterval(myInterval);
+    // eslint-disable-next-line
     },[])
 
     
