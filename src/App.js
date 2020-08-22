@@ -6,9 +6,10 @@ import GameIntroUnit from "./components/GameIntro/GameIntroUnit";
 import LeaderBoardUnit from "./components/LeaderBoard/LeaderBoardUnit";
 
 
+
 function App() {
   const [isStarted, setIsStarted] = useState(false);//development true, production false
-  
+
 	return (
 		<div className="App">
 			<NavbarUnit />

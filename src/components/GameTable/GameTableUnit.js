@@ -79,7 +79,12 @@ const GameTableUnit = () => {
 
 	const handleChange = (e) => {
 		setCurrentAnswer(e.target.value);
-		/* console.log(currentAnswer) */
+        /* console.log(currentAnswer) */
+ 
+    };
+    const handleTouchChange = (recieved_char) => {
+		setCurrentAnswer(currentAnswer+recieved_char);
+        /* console.log(currentAnswer) */
 	};
 	const handleAnswer = () => {
 		/* console.log(currentAnswer) */
@@ -102,7 +107,7 @@ const GameTableUnit = () => {
 
 			<div className="game_container_inner">
                 {data_tableChars.split("").map((char, index) => 
-                        (<div key={index} className="game_chars">
+                        (<div key={index} className="game_chars" onClick={()=>handleTouchChange(char)}>
                                 <p>{char}</p>
                         </div>)
                     )
@@ -129,7 +134,7 @@ const GameTableUnit = () => {
 					type="text"
 					value={currentAnswer}
 					onChange={handleChange}
-					onKeyPress={(event) => (event.charCode === 13 ? handleAnswer() : null)}
+                    onKeyPress={(event) => (event.charCode === 13 ? handleAnswer() : null)}
 				/>
 
 				
