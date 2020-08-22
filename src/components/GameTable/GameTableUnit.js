@@ -5,6 +5,7 @@ import "./GameTable.scss";
 import CountDownUnit from "../CountDown/CountDownUnit";
 import ResultComponentUnit from "../ResultComponent/ResultComponentUnit";
 import { GameContext } from "../../context/GameContext";
+import { ReactComponent as SvgButton } from '../../assets/arrow-right-circle.svg';
 import { useContext } from "react";
 
 const GameTableUnit = () => {
@@ -15,8 +16,7 @@ const GameTableUnit = () => {
 	const [currentAnswer, setCurrentAnswer] = useState("");
 	const [data_tableChars, setDatatableChars] = useState("");
 	const [data_validAnswers, setValidAnswers] = useState("");
-	const { currentStage, username } = useContext(GameContext);
-
+    const { currentStage, username,display, setDisplay } = useContext(GameContext)
     
 	//Getting Server-side Data
 	const fetch_game_data = async () => {
@@ -36,12 +36,19 @@ const GameTableUnit = () => {
 			//console.log("puan sıfırlandı");
 			setPoint(0);
 		}
-	};
+    };
+    
+    const fetch_total_point = () => {
+        axios.put(`${process.env.REACT_APP_ACTIVESERVER}/api/scores/${username}`, { "point": point });
+    }
 
     useEffect(()=>{
         if(currentStage === "resultStage"){
             //console.log("Result aşamasında ve backende gönderildi, puanın: " + point);
-            axios.put(`${process.env.REACT_APP_ACTIVESERVER}/api/scores/${username}`, { "point": point });
+            fetch_total_point()
+        }else if(currentStage === "gameStage"){
+            fetch_game_data()
+    
         }
     // eslint-disable-next-line
     },[currentStage])
@@ -91,24 +98,31 @@ const GameTableUnit = () => {
 	};
 	return (
 		<div className="game_container">
-			<div className="game_container_inner">
-				{data_tableChars.split("").map((char, index) => {
-					return (
-						<div key={index} className="game_chars">
-							<p>{char}</p>
-						</div>
-					);
-				})}
-			</div>
+            <CountDownUnit fetch_game_data={fetch_game_data} />
 
-			<div className="game_correct_answers">
-				<CountDownUnit fetch_game_data={fetch_game_data} />
-				<div> Puan: {point}</div>
-				<ResultComponentUnit
-					correctAnswers={correctAnswers}
-					data_validAnswers={data_validAnswers}
-				/>
+			<div className="game_container_inner">
+                {data_tableChars.split("").map((char, index) => 
+                        (<div key={index} className="game_chars">
+                                <p>{char}</p>
+                        </div>)
+                    )
+				}
 			</div>
+            
+            <div className="button_container">
+                <div className="button1" onClick={()=>setDisplay(!display)}>
+                    stats
+                </div>
+            </div>
+        
+     
+            <div className="game_correct_answers" style={display ? {display:"block"}:{display: "none"}}>
+                <div> Puan: {point}</div>
+                <ResultComponentUnit correctAnswers={correctAnswers} data_validAnswers={data_validAnswers}/>
+            </div>
+                
+            
+
 
 			<div className="game_input_answer">
 				<input
@@ -118,9 +132,11 @@ const GameTableUnit = () => {
 					onKeyPress={(event) => (event.charCode === 13 ? handleAnswer() : null)}
 				/>
 
-				<button type="submit" onClick={handleAnswer}>
-					Enter
-				</button>
+				
+                <div className="btn" onClick={handleAnswer} >
+                    <SvgButton/>
+                </div> 
+         
 			</div>
 		</div>
 	);

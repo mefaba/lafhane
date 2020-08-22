@@ -1,4 +1,4 @@
-### Developing..
+### Developing Notes
 
 -Issue1: socket.emit interval 3000 / Backend
 
@@ -11,3 +11,16 @@
 -Issue5: Clear Correct Answer List after 15 sec(results of 3 minute table) / Client Side
 
 -Issue6: Count Down Timer, 3 Minutes and 15 seconds / Backend + Frontend.
+
+
+### Coding Features
+
+☑️ React, React Hooks,Functional Components
+
+☑️ Socket.io
+
+☑️ MongoDB
+
+☑️ Express, Node.js
+
+☑️ SCSS

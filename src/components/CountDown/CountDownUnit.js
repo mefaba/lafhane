@@ -4,6 +4,7 @@ import axios from 'axios'
 import { useState } from 'react'
 import { useContext } from 'react'
 import { GameContext } from '../../context/GameContext'
+import "./CountDown.scss"
 
 const CountDownUnit = ({fetch_game_data, fetch_total_point}) => {
     const {setCurrentStage}= useContext(GameContext)
@@ -23,13 +24,11 @@ const CountDownUnit = ({fetch_game_data, fetch_total_point}) => {
                         if(response.data.currentStage==="gameStage"){
                             setCurrentStage(response.data.currentStage)
                             //trigger game fetch data
-                            fetch_game_data()
+                            //fetch_game_data()
                             setRemainingTime(response.data.gameTime)
                         }else if(response.data.currentStage==="resultStage"){
                             setCurrentStage(response.data.currentStage)
-                            setRemainingTime(response.data.resultTime)
-            
-                            
+                            setRemainingTime(response.data.resultTime)   
                         }
                     })
                 }
@@ -42,9 +41,7 @@ const CountDownUnit = ({fetch_game_data, fetch_total_point}) => {
     
 
     return (
-        <div>
-            {/* {remainingTime}
-            <br/> */}
+        <div className="countdown_container">
             { minutes }:{ seconds < 10 ? `0${ seconds }` : seconds }
         </div>
     )
