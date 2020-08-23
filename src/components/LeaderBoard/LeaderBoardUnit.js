@@ -4,6 +4,7 @@ import { GameContext } from "../../context/GameContext";
 import axios from "axios";
 import { useState } from "react";
 import "./LeaderBoard.scss";
+import { ReactComponent as SvgTrophy } from '../../assets/trophy.svg';
 
 function LeaderBoardUnit() {
 	const { currentStage, display } = useContext(GameContext);
@@ -39,7 +40,7 @@ function LeaderBoardUnit() {
 	return (
 		<div className="leaderboard" style={display ? {display:"block"}:{display: "none"}}>
 			<h1>
-				<svg>Icon</svg>
+				<SvgTrophy/>
 				En İyiler
 			</h1>
 			<ol>

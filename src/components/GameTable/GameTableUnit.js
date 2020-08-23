@@ -116,7 +116,10 @@ const GameTableUnit = () => {
             
             <div className="button_container">
                 <div className="button1" onClick={()=>setDisplay(!display)}>
-                    stats
+                    Stats
+                </div>
+                <div className="mobile_point">
+                    Puan: {point}
                 </div>
             </div>
         

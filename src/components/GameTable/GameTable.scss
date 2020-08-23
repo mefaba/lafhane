@@ -7,8 +7,9 @@
 	flex-direction: column;
 	//justify-content: center;
 	align-items: center;
-	height: 100vh;
-	width: 100vw;
+	//height: 100vh;
+    width: 100vw;
+    height: 100%;
 	.game_container_inner {
 		padding: 10px;
 		background: linear-gradient(#4389a2, #5c258d);
@@ -35,7 +36,7 @@
 			justify-content: center;
 			align-items: center;
             user-select: none;
-            transition: all 0.2s;
+            transition: all 0.1s;
             transition-property: background-color;
             &:active {
                 background-color: darken(rgba(134, 131, 131, 0.473), 20%);
@@ -45,7 +46,7 @@
 	.game_correct_answers {
         display: block;
 		position: absolute;
-		height: 50vh;
+		height: 430px;
 		width: 200px;
 		top: 15%;
 		right: 10px;
@@ -56,6 +57,7 @@
         overflow-x: hidden;
         @media screen and (max-width: 400px) {
             width: 150px;
+            height: 330px;
         }
 	}
 	.game_input_answer {
@@ -119,6 +121,23 @@
         &:hover {
             color: #000000;
             background-color: #ffffff;
+        }
+    }
+    .mobile_point{
+        display: inline-block;
+        padding: 0.35em 1.2em;
+        border: 0.1em solid #ffffff;
+        margin: 0 0.3em 0.3em 0;
+        border-radius: 0.12em;
+        box-sizing: border-box;
+        text-decoration: none;
+        font-family: "Roboto", sans-serif;
+        font-weight: 300;
+        color: #ffffff;
+        text-align: center;
+        transition: all 0.2s;
+        @media screen and (min-width: 400px) {
+            display: none;
         }
     }
 }
