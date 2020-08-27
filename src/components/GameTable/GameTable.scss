@@ -9,7 +9,7 @@
 	align-items: center;
 	//height: 100vh;
     width: 100vw;
-    height: 100%;
+	height: 100%;
 	.game_container_inner {
 		padding: 10px;
 		background: linear-gradient(#4389a2, #5c258d);
@@ -19,7 +19,7 @@
 		grid-template-rows: 100px 100px 100px 100px;
 		column-gap: 10px;
 		row-gap: 10px;
-		@media (max-width: 450px) {
+		@media (max-width: 500px) {
 			grid-template-columns: 75px 75px 75px 75px;
 			grid-template-rows: 75px 75px 75px 75px;
 		}
@@ -55,7 +55,7 @@
 		text-align: center;
 		overflow: scroll;
         overflow-x: hidden;
-        @media screen and (max-width: 400px) {
+        @media screen and (max-width: 500px) {
             width: 150px;
             height: 330px;
         }
@@ -64,6 +64,7 @@
 		margin: 5px 25px;
 		display: flex;
 		text-align: center;
+		animation: slide-in-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
 		input {
 			//width: 80%;
 			padding: 5px;

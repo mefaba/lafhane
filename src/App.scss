@@ -5,6 +5,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
+  overflow: hidden;
 }
 p{
   margin: 0.5rem;
@@ -24,6 +25,7 @@ p{
   align-items: center;
   flex-direction: column;
   height: 100vh;
+  
 }
 
 .navbar{
@@ -38,3 +40,18 @@ p{
     margin: 0;
   }
 }
+
+::-webkit-scrollbar {
+  width: 6px;
+} 
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+} 
+::-webkit-scrollbar-thumb {
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+
+
+

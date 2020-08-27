@@ -8,7 +8,7 @@ import LeaderBoardUnit from "./components/LeaderBoard/LeaderBoardUnit";
 
 
 function App() {
-  const [isStarted, setIsStarted] = useState(false);//development true, production false
+  const [isStarted, setIsStarted] = useState(true);//development true, production false
 
 	return (
 		<div className="App">

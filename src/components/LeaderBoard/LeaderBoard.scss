@@ -1,26 +1,3 @@
-.leaderboard_container {
-	position: absolute;
-	height: 50vh;
-	width: 200px;
-	top: 15%;
-	left: 10px;
-	border-radius: 10px;
-	background-color: rgb(187, 176, 79);
-	text-align: center;
-	overflow: scroll;
-	overflow-x: hidden;
-	overflow-y: hidden;
-	z-index: 2;
-
-	.leaderboard_container_inner {
-		margin-right: 5px;
-		margin-left: 5px;
-		.leaderboard_rows {
-			display: flex;
-			justify-content: space-between;
-		}
-	}
-}
 
 /*--------------------
 Leaderboard
@@ -39,29 +16,14 @@ Leaderboard
     box-shadow: 0 7px 30px rgba(62, 9, 11, 0.3);
     overflow: scroll;
     overflow-x: hidden;
-    
-    &::-webkit-scrollbar-track{
-        //box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-        //background-color: #F5F5F5;
-        height: 100px;
-        scroll-margin-top: 20px;
-    }
-    
-    &::-webkit-scrollbar{
-        width: 5px;
-        //height: 10px;
-        
-        //background-color: #F5F5F5;
-    }
-    
-    &::-webkit-scrollbar-thumb{
-        //background-color: #000000;
-        //border: 2px solid #555555;
-    }
-    @media screen and (max-width: 400px) {
+	animation: slide-in-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+
+	@media screen and (max-width: 500px) {
         width: 150px;
         height: 330px;
-    }
+	}
+
+
 	h1 {
 		font-size: 18px;
 		color: #e1e1e1;
@@ -174,3 +136,20 @@ Leaderboard
 		}
 	}
 }
+
+
+
+@keyframes slide-in-left {
+	0% {
+		transform: translateX(-500px);
+		opacity: 0;
+	}
+    60%{
+        transform: translateX(10px);
+    }
+	100% {
+		transform: translateX(0);
+		opacity: 1;
+	}
+}
+  
