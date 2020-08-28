@@ -1,4 +1,4 @@
-### Developing Notes
+### Development Notes
 
 -Issue1: socket.emit interval 3000 / Backend
 
