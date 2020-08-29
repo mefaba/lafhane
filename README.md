@@ -18,6 +18,9 @@
 
 -Issue9: Mobile Responsiveness and compatibility
 
+-Issue10: Total point of each round. / Backend
+
+-Issue11: Flip Input, Put animation that counts down from 3 when game about to start.
 
 
 
