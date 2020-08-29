@@ -12,6 +12,14 @@
 
 -Issue6: Count Down Timer, 3 Minutes and 15 seconds / Backend + Frontend.
 
+-Issue7: How to Play Section
+
+-Issue8: Loading Animation / Lottie
+
+-Issue9: Mobile Responsiveness and compatibility
+
+
+
 
 ### Coding Features
 
