@@ -1,0 +1,36 @@
+.shortbreak_container {
+  width: 440px;
+  height: 440px;
+  background-color: pink;
+  display: flex;
+  //overflow: hidden;
+
+  .shortbreak_box {
+    width: 50%;
+    height: 100%;
+  }
+}
+
+.shortbreak--appear {
+}
+.shortbreak--appear-active {
+}
+.shortbreak--appear-done {
+}
+
+.shortbreak--enter {
+  transform: rotateY(90deg) rotateX(45deg);
+}
+.shortbreak--enter-active {
+  transform: rotateY(0) rotateX(0);
+  transition: transform 1s cubic-bezier(0, 0.55, 0.45, 1);
+}
+.shortbreak--enter-done {
+}
+
+.shortbreak--exit {
+}
+.shortbreak--exit-active {
+}
+.shortbreak--exit-done {
+}

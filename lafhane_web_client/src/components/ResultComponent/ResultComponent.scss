@@ -1,0 +1,25 @@
+.result_container {
+  height: 100%;
+  width: 100%;
+  overflow-y: scroll;
+  //border-radius: 10px;
+  background-color: rgb(111, 201, 255);
+  text-align: center;
+  animation: slide-in-right 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  @media screen and (max-width: 500px) {
+  }
+}
+
+@keyframes slide-in-right {
+  0% {
+    transform: translateX(500px);
+    opacity: 0;
+  }
+  60% {
+    transform: translateX(-10px);
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
