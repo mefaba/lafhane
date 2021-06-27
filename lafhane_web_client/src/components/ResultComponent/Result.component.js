@@ -9,8 +9,8 @@ function Result({ correctAnswers, data_validAnswers, point }) {
   if (currentStage === "gameStage") {
     return (
       <>
-        <div> Puan: {point}</div>
-        <p>Cevaplar</p>
+        <div>Total Score: {point}</div>
+        <p>Amswers</p>
         {correctAnswers.length
           ? correctAnswers.map((answer, index) => (
               <div key={index}>
@@ -23,8 +23,8 @@ function Result({ correctAnswers, data_validAnswers, point }) {
   } else if (currentStage === "resultStage") {
     return (
       <>
-        <div> Puan: {point}</div>
-        <p>Tüm Laflar</p>
+        <div>Total Score: {point}</div>
+        <p>Answers</p>
         {data_validAnswers.length
           ? data_validAnswers
               .sort((a, b) => b.length - a.length)

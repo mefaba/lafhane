@@ -97,8 +97,11 @@ const GameTableUnit = () => {
   };
   const handleAnswer = () => {
     /* console.log(currentAnswer) */
-    if (data_validAnswers.includes(currentAnswer) && !correctAnswers.includes(currentAnswer) && currentStage === "gameStage") {
-      console.log("Puan eklendi.");
+    if (
+      data_validAnswers.includes(currentAnswer) &&
+      !correctAnswers.includes(currentAnswer) &&
+      currentStage === "gameStage"
+    ) {
       setCorrectAnswers([...correctAnswers, currentAnswer]);
       setPoint(point + currentAnswer.length * 2 - 3); //Points calculates as follows => length,point = 3,3 / 4,5 / 5,7 / 6,9 / 7,11 / 8,13 / 9,15 / 10,17
       //sendPointToAPI() //send total point to backend
@@ -159,7 +162,12 @@ const GameTableUnit = () => {
         <div className="mobile_point">{point}</div>
       </div>
       <div className="game_input_answer">
-        <input type="text" value={currentAnswer} onChange={handleChange} onKeyPress={(event) => (event.charCode === 13 ? handleAnswer() : null)} />
+        <input
+          type="text"
+          value={currentAnswer}
+          onChange={handleChange}
+          onKeyPress={(event) => (event.charCode === 13 ? handleAnswer() : null)}
+        />
 
         <div className="btn" onClick={handleAnswer}>
           <SvgButton />

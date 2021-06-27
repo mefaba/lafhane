@@ -41,7 +41,7 @@ function LeaderBoardUnit() {
     <>
       <h1>
         <SvgTrophy />
-        En İyiler
+        Top Rank
       </h1>
       <ol>
         {leaderboard.map((x, index) => {
