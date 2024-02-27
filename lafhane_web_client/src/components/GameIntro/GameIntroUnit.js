@@ -10,28 +10,41 @@ import LottieLoading from "./LottieLoading.js";
 //import Slideshow from "./Slideshow";
 import Accordion from "./Accordion";
 
-function GameIntroUnit({setIsStarted}) {
-    const {username, setUsername} = useContext(GameContext);
+function GameIntroUnit() {
+    const {username, setUsername, setIsStarted} = useContext(GameContext);
     const [message, setMessage] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 
     const sendUsernameToAPI = () => {
+        const token =
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
         axios
-            .post(`${process.env.REACT_APP_ACTIVESERVER}/api/login`, {
-                username: username,
-            })
-            .then(({data}) => {
-                //then if response is true setIsStarted => True / Else if negative ask new user name
-                if (data) {
-                    setIsStarted(false);
-                    setTimeout(() => {
-                        //Giriş başarısız olsa dahi 3 saniye sonra loading ekranı gitsin
-                        setIsLoading(false);
-                    }, 3000);
-                } else {
-                    setIsStarted(true);
+            .post(
+                `${process.env.REACT_APP_ACTIVESERVER}/api/login`,
+                {
+                    username: username,
+                },
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Access-Control-Allow-Origin": "*",
+                    },
+                    validateStatus: function (status) {
+                        return status >= 200 && status < 300; // default
+                    },
                 }
-                /* setIsStarted(true) */
+            )
+            .then((response) => {
+                console.log("🚀 ~ .then ~ data:", response);
+                const {token} = response;
+                // Save JWT token to cookies
+                document.cookie = `token=${token}`;
+                setTimeout(() => setIsStarted(true), 1000);
+            })
+            .catch((error) => {
+                console.log("🚀 ~ sendUsernameToAPI ~ error:", error);
+                // Handle error if necessary
+                setIsStarted(false);
             });
     };
     const handleStart = () => {
@@ -41,6 +54,11 @@ function GameIntroUnit({setIsStarted}) {
             setIsLoading(true);
             setMessage("Hoşgeldiniz yada Tekrar Deneyin. Bu isimde bir kullanıcı zaten oyunda olabilir. Farklı bir isim deneyin.");
         }
+
+        setTimeout(() => {
+            //Giriş başarısız olsa dahi 3 saniye sonra loading ekranı gitsin
+            setIsLoading(false);
+        }, 3000);
 
         /* console.log(username) */
     };
