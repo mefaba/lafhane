@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
+import {gameViews} from "../constants/game";
 /* import axios from "axios"; */
 
 export const GameContext = React.createContext();
 
 const GameProvider = (props) => {
-    const [currentStage, setCurrentStage]= useState("gameStage") //gameStage & resultStage
-    const [username, setUsername] = useState("")
-    const [display, setDisplay] = useState(true)
-   
+    const [gameView, setGameView] = useState(gameViews.playView); //gameViews.loginView, gameViews.playView, gameViews.scoreView, gameViews.errorView
+    const [isStarted, setIsStarted] = useState(false); //development true, production false
+    const [currentStage, setCurrentStage] = useState("gameStage"); //gameStage & resultStage
+    const [username, setUsername] = useState("");
+    const [display, setDisplay] = useState(true);
+
     /* const [data_tableChars, setDatatableChars] = useState("")
     const [data_validAnswers, setValidAnswers] = useState("") */
 
@@ -23,11 +26,13 @@ const GameProvider = (props) => {
        
     } */
 
-	return (
-		<GameContext.Provider value={{currentStage, setCurrentStage, username, setUsername,display, setDisplay}}>
-			{props.children}
-		</GameContext.Provider>
-	);
+    return (
+        <GameContext.Provider
+            value={{currentStage, setCurrentStage, username, setUsername, display, setDisplay, isStarted, setIsStarted, gameView, setGameView}}
+        >
+            {props.children}
+        </GameContext.Provider>
+    );
 };
 
 export default GameProvider;

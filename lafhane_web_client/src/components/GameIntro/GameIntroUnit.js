@@ -9,14 +9,16 @@ import "./GameIntro.scss";
 import LottieLoading from "./LottieLoading.js";
 //import Slideshow from "./Slideshow";
 import Accordion from "./Accordion";
+import {gameViews} from "../../constants/game.js";
 
 function GameIntroUnit() {
-    const {username, setUsername, setIsStarted} = useContext(GameContext);
+    const {username, setUsername, setIsStarted, setGameView} = useContext(GameContext);
     const [message, setMessage] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 
     const sendUsernameToAPI = () => {
-        const token =
+        //TODO
+        const headerToken =
             "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
         axios
             .post(
@@ -26,25 +28,27 @@ function GameIntroUnit() {
                 },
                 {
                     headers: {
-                        "Authorization": `Bearer ${token}`,
+                        "Authorization": `Bearer ${headerToken}`,
                         "Access-Control-Allow-Origin": "*",
                     },
                     validateStatus: function (status) {
-                        return status >= 200 && status < 300; // default
+                        return status >= 200 && status < 300; // default, but added for clarity. Axios throws error if status is not between 200-299
                     },
                 }
             )
             .then((response) => {
                 console.log("🚀 ~ .then ~ data:", response);
-                const {token} = response;
+                const {jwtToken} = response.data;
                 // Save JWT token to cookies
-                document.cookie = `token=${token}`;
-                setTimeout(() => setIsStarted(true), 1000);
+                document.cookie = `jwtToken=${jwtToken}`;
+                setTimeout(() => setGameView(gameViews.playView), 1000);
+                console.log("🚀 setGameView");
             })
             .catch((error) => {
                 console.log("🚀 ~ sendUsernameToAPI ~ error:", error);
                 // Handle error if necessary
-                setIsStarted(false);
+                setUsername("");
+                setGameView(gameViews.loginView);
             });
     };
     const handleStart = () => {
