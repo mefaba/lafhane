@@ -2,38 +2,54 @@ package com.lafhane.lafhaneserverjava.models;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Puzzle {
-    private String puzzle; // ["SZRSK", "KRSZS", "ZKSSR", "SSZKR", "RSKZS]
-    private List<String> answerList;
+    private String letters; //"SZRSKKRSZSZKSSRSSZKRRSKZS" = ["SZRSK", "KRSZS", "ZKSSR", "SSZKR", "RSKZS]
+
     private HashMap<String, Integer> answersHashMap; // word, point {"SZRSK": 1, "KRSZS": 2, "ZKSSR": 3, "SSZKR": 4,
                                                      // "RSKZS": 5}
 
-    public Puzzle(String puzzle) {
-        this.puzzle = puzzle;
+
+    public Puzzle(String letters, List<String> answers) {
+        this.answersHashMap = new HashMap<>();
+        this.letters = letters;
+        this.generateAnswerHashMap(answers);
     }
 
     // Getters and Setters
-    public String getPuzzle() {
-        return puzzle;
+    public String getLetters() {
+        return letters;
     }
 
-    public void setPuzzle(String puzzle) {
-        this.puzzle = puzzle;
-        generateAnswerList(puzzle);
+
+    public void setLetters(String letters) {
+        this.letters = letters;
+    }
+    public String toString() {
+        return letters;
     }
 
-    public List<String> getAnswerList() {
-        return answerList;
-    }
 
     // Methods
-    public boolean checkAnswer(String answer) {
-        // TODO implement here
-        return false;
+    public Map<String, Integer> checkAnswer(String answer) {
+        if(answersHashMap.containsKey(answer)) {
+            Integer answerPoint = answersHashMap.get(answer);
+            Map<String,Integer> answerMap = new HashMap<>();
+            answerMap.put(answer, answerPoint);
+            return answerMap;
+        }
+        return null;
     }
 
-    private void generateAnswerList(String puzzle) {
-        // TODO implement here
+    private void generateAnswerHashMap(List<String> answers) {
+        // TODO implement ALGORITHM here
+        //answersHashMap.put("sil",  "sil".length()*2-3);
+        int score;
+        for (int i = 0; i < answers.size(); i++) {
+            score = (answers.get(i).length() * 2-3);
+            answersHashMap.put(answers.get(i), score);
+        }
+        answersHashMap.put("sil",  "sil".length()*2-3);
     }
 }

@@ -2,8 +2,8 @@ package com.lafhane.lafhaneserverjava.models;
 
 import java.util.Map;
 
-public class GameData {
-    private int gameScore;
+public class PlayerGameData {
+    private int currentScore;
     Map<String, Integer> correctAnswers;
 
     public void addCorrectAnswer(String answer) {
@@ -12,16 +12,16 @@ public class GameData {
         correctAnswers.put(answer, point);
     }
 
-    public int getGameScore() {
-        return gameScore;
+    public int getCurrentScore() {
+        return currentScore;
     }
 
-    public void setGameScore(int gameScore) {
-        this.gameScore = gameScore;
+    public void setCurrentScore(int currentScore) {
+        this.currentScore = currentScore;
     }
 
     private void increaseScore(int increment) {
-        this.gameScore += increment;
+        this.currentScore += increment;
         // TODO implement here
     }
 

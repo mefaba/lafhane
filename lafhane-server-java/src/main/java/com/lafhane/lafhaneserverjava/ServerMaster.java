@@ -13,10 +13,9 @@ import org.bson.Document;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 import static com.mongodb.client.model.Filters.eq;
 
@@ -49,6 +48,8 @@ public class ServerMaster {
             String username = playerDTO.getUsername();
             MongoDatabase database = mongoClient.getDatabase("lafhane");
             MongoCollection<Document> collection = database.getCollection("players");
+            //collection.createIndex(new Document().append("username", 1).append("unique", true));//{ "username": 1 }, { unique: true }
+
             // check if username exist in db
             Document doc = collection.find(eq("username", username)).first();
 
@@ -56,7 +57,7 @@ public class ServerMaster {
             // same device
             if (doc != null) {
                 String jwtToken = bearerToken.substring(7); // Remove "Bearer " prefix;
-                DecodedJWT decodedJWT = jwtService.verifyToken(jwtToken);
+                // TODO DecodedJWT decodedJWT = jwtService.verifyToken(jwtToken);
                 gameMaster.AddPlayer(new Player(username));
                 String response = new JSONObject().put("username", username).put("jwtToken", jwtToken).toString();
                 return ResponseEntity.ok(response);
@@ -74,4 +75,58 @@ public class ServerMaster {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }
+
+    @GetMapping("/api/gamedata")
+    public ResponseEntity<String> getGameTable(@RequestHeader("Authorization") String bearerToken) {
+        try {
+            //String jwtToken = bearerToken.substring(7); // Remove "Bearer " prefix;
+            // TODO DecodedJWT decodedJWT = jwtService.verifyToken(jwtToken);
+            //String username = jwtService.getUsernameFromToken(jwtToken);
+            String username = "test1";
+            //TODO Ensure that the player is in the game, playerlist
+            JSONObject responseJSON = new JSONObject()
+                    .put("username", username)
+                    .put("puzzle", gameMaster.getPuzzle().toString())
+                    .put("gameState", gameMaster.getGameState())
+                    .put("highScoresGame", gameMaster.getHighScoresGame())
+                    .put("highScoresTotal", gameMaster.getHighScoresTotal());
+
+            return ResponseEntity.ok(responseJSON.toString());
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        }
+    }
+
+
+    @PostMapping("/api/check_answer")
+    public ResponseEntity<String> getCheckAnswer(@RequestBody Map<String,String> payload, @RequestHeader("Authorization") String bearerToken) {
+        try {
+            String answer = payload.get("answer");
+            if(answer == null || answer.isEmpty()){
+                return ResponseEntity.badRequest().body("Error: Answer is empty");
+            }
+            //String jwtToken = bearerToken.substring(7); // Remove "Bearer " prefix;
+            // TODO DecodedJWT decodedJWT = jwtService.verifyToken(jwtToken);
+            //String username = jwtService.getUsernameFromToken(jwtToken);
+            String username = "test1";
+            //TODO Ensure that the player is in the game, playerlist
+    
+            Map<String, Integer> checkResult = gameMaster.getPuzzle().checkAnswer(answer);
+            if(checkResult == null){
+                return ResponseEntity.ok(new JSONObject()
+                        .put("resultStatus", "wrong")
+                        .put("resultData", "")
+                        .toString());
+            }
+            return ResponseEntity.ok(new JSONObject()
+                    .put("resultStatus", "correct")
+                    .put("resultData", checkResult.get(answer))
+                    .toString());
+            //JSONObject responseJSON = new JSONObject();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        }
+    }
+
 }

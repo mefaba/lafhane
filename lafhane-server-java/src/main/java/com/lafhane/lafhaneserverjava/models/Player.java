@@ -4,13 +4,11 @@ import org.bson.Document;
 
 import java.util.Objects;
 
-public class Player {
 
+public class Player {
     private String id;
     private String username;
-    private int totalScore;
-
-    private GameData gameData;
+    private PlayerGameData gameData;
 
     public Player(String username) {
         this.username = username;
@@ -29,11 +27,11 @@ public class Player {
         }
     }
 
-    public void setGameData(GameData gameData) {
+    public void setGameData(PlayerGameData gameData) {
         this.gameData = gameData;
     }
 
-    public GameData getGameData() {
+    public PlayerGameData getGameData() {
         return gameData;
     }
 
