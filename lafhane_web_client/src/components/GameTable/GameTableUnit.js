@@ -1,15 +1,10 @@
 import React, {useState, useEffect} from "react";
-import io from "socket.io-client";
-import axios from "axios";
 import "./GameTable.scss";
-import CountDownUnit from "../CountDown/CountDownUnit.js";
-import Result from "../ResultComponent/Result.component.js";
 import {GameContext} from "../../context/GameContext.js";
 import {ReactComponent as SvgButton} from "../../assets/arrow-right-circle.svg";
 import {useContext} from "react";
 import {CSSTransition} from "react-transition-group";
-import {ShortBreak} from "../index.js";
-import LeaderBoardUnit from "../LeaderBoard/LeaderBoardUnit.js";
+import { api_get_game_data, api_post_check_answer } from "../../api/api_calls.js";
 
 const gameData = {
     puzzle: "irpnnsiletbfooie",
@@ -84,39 +79,25 @@ const GameTableUnit = () => {
         "isabet",
     ];
     const [score, setScore] = useState(0);
-    const [correctAnswers, setCorrectAnswers] = useState([]);
     const [currentAnswer, setCurrentAnswer] = useState("");
     const [puzzleLetters, setPuzzleLetters] = useState("");
-    const {} = useContext(GameContext);
+    const {setRemainingTime} = useContext(GameContext);
 
-    const get_game_data = async () => {
-        await axios
-            .get(`${process.env.REACT_APP_ACTIVESERVER}/api/gamedata`, {
-                headers: {
-                    "Authorization": `Bearer 12345`,
-                    "Access-Control-Allow-Origin": "*",
-                },
-            })
+    const getGameData = async () => {
+        await api_get_game_data()
             .then((response) => {
-                const {puzzle} = response.data;
+                const {puzzle, remainingTime} = response.data;
+                console.log("🚀 ~ .GameTableUnit ~ remainingTime:", remainingTime)
                 setPuzzleLetters(puzzle);
+                setRemainingTime(remainingTime);
             })
             .catch((error) => {
-                console.log("🚀 ~ get_game_data ~ error", error);
+                console.log("🚀 ~ getGameData ~ error", error);
             });
     };
 
-    const post_check_answer = async () => {
-        await axios
-            .post(`${process.env.REACT_APP_ACTIVESERVER}/api/check_answer`, {
-                answer: currentAnswer,
-            }, {
-                
-                headers: {
-                    "Authorization": `Bearer 12345`,
-                    "Access-Control-Allow-Origin": "*",
-                },
-            })
+    const checkAnswer = async () => {
+        await api_post_check_answer(currentAnswer)
             .then((response) => {
                 const {resultStatus, resultData} = response.data;
                 if (resultStatus === "correct") {
@@ -129,7 +110,7 @@ const GameTableUnit = () => {
 
 
     useEffect(() => {
-        get_game_data();
+        getGameData();
         // eslint-disable-next-line
     }, []);
 
@@ -140,14 +121,13 @@ const GameTableUnit = () => {
         setCurrentAnswer(currentAnswer + recieved_char);
     };
     const handleAnswerSubmit = () => {
-        //checkanswer
-        post_check_answer();
+        checkAnswer();
         setCurrentAnswer("");
     };
     return (
         <div className="game_container">
             <div className="button_container">
-                <div className="mobile_score">SCORE {score}</div>
+                <div className="button1">SCORE {score}</div>
             </div>
             <CSSTransition
                 in={true}
@@ -156,7 +136,6 @@ const GameTableUnit = () => {
                     enter: 0,
                     exit: 800,
                 }}
-                onExited={false}
                 unmountOnExit
                 appear={true}
                 classNames="game-container-"

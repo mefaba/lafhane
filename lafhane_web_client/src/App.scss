@@ -1,4 +1,5 @@
 body {
+  background: linear-gradient(#4389a2, #5c258d);
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -29,7 +30,7 @@ p{
 }
 
 .navbar{
-  position: absolute;
+  //position: absolute;
   top: 0;
   z-index: 10;
   background-color: black;
