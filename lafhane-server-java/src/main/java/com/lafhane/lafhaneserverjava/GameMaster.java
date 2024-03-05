@@ -1,19 +1,26 @@
 package com.lafhane.lafhaneserverjava;
 
+import com.lafhane.lafhaneserverjava.enums.GAMESTATE;
 import com.lafhane.lafhaneserverjava.models.PlayerGameData;
 import com.lafhane.lafhaneserverjava.models.Player;
 import com.lafhane.lafhaneserverjava.models.Puzzle;
+import com.lafhane.lafhaneserverjava.services.CountDownTimerService;
 import com.lafhane.lafhaneserverjava.services.PuzzleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
 public class GameMaster {
     private Puzzle puzzle;
-    private String gameState; // play, lobby
+    private GAMESTATE gameState; // play, lobby
     private int remainingTime;
     private HashSet<Player> playerList;
 
@@ -21,12 +28,15 @@ public class GameMaster {
     private HashMap<Player, Integer> highScoresTotal;
 
     private PuzzleService puzzleService;
+    private CountDownTimerService countDownTimerService;
     // Getters and Setters
 
     @Autowired
-    public GameMaster(PuzzleService puzzleService) {
-        this.puzzleService = puzzleService;
+    public GameMaster(PuzzleService puzzleService, CountDownTimerService countDownTimerService) {
         this.playerList = new HashSet<>();
+        this.puzzleService = puzzleService;
+        this.countDownTimerService = countDownTimerService;
+   
         this.StartGame();
     }
 
@@ -53,26 +63,19 @@ public class GameMaster {
     public void setPuzzle(Puzzle puzzle) {
         this.puzzle = puzzle;
     }
-    public String getGameState() {
+    public GAMESTATE getGameState() {
         return gameState;
     }
 
-    public void setGameState(String gameState) {
+    public void setGameState(GAMESTATE gameState) {
         this.gameState = gameState;
     }
 
-    public int getRemainingTime() {
-        return this.remainingTime;
-    }
 
-    public void setRemainingTime(int remainingTime) {
-        this.remainingTime = remainingTime;
-    }
 
     // Methods
     public void StartGame() {
         this.puzzle = puzzleService.queryPuzzle(0);
-        this.gameState = "STARTED";
         // TODO implement here
         // create a GameData object for each user
         for (Player player : playerList) {
@@ -81,7 +84,6 @@ public class GameMaster {
     }
 
     public void EndGame() {
-        this.gameState = "ENDED";
         for (Player player : playerList) {
             player.setGameData(null);
         }
@@ -109,4 +111,21 @@ public class GameMaster {
         // TODO implement here
     }
 
+    public void changeGameState(GAMESTATE state) {
+        this.gameState = state;
+    }
+   
+ 
+    public int getRemainingTime() {
+        return countDownTimerService.getTimeLeft();
+    }
+
+    public void setRemainingTime(int remainingTime) {
+        countDownTimerService.setTimeLeft(remainingTime);
+    }
+
+    public void startCountdown(int time) {
+        countDownTimerService.resetTimer();
+        countDownTimerService.startTimer(time);
+    }
 }

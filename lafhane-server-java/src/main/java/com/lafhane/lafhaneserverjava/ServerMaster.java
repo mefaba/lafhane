@@ -1,7 +1,8 @@
 package com.lafhane.lafhaneserverjava;
 
-import com.auth0.jwt.interfaces.DecodedJWT;
+import com.lafhane.lafhaneserverjava.config.WebSocketConfig.WebSocketHandler;
 import com.lafhane.lafhaneserverjava.dto.PlayerDTO;
+import com.lafhane.lafhaneserverjava.enums.GAMESTATE;
 import com.lafhane.lafhaneserverjava.models.Player;
 import com.lafhane.lafhaneserverjava.services.JwtService;
 import com.lafhane.lafhaneserverjava.services.PlayerService;
@@ -13,9 +14,12 @@ import org.bson.Document;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 import static com.mongodb.client.model.Filters.eq;
 
@@ -26,14 +30,20 @@ public class ServerMaster {
     private final MongoClient mongoClient;
     private final PlayerService playerService;
     private final JwtService jwtService;
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
+
+    @Autowired
+    private WebSocketHandler webSocketHandler;
 
     @Autowired
     public ServerMaster(MongoClient mongoClient, PlayerService playerService, JwtService jwtService,
-            GameMaster gameMaster) {
+            GameMaster gameMaster, WebSocketHandler webSocketHandler) {
         this.mongoClient = mongoClient;
         this.playerService = playerService;
         this.jwtService = jwtService;
         this.gameMaster = gameMaster;
+        this.webSocketHandler = webSocketHandler;
     }
 
     public MongoClient getMongoClient() {
@@ -89,7 +99,8 @@ public class ServerMaster {
                     .put("puzzle", gameMaster.getPuzzle().toString())
                     .put("gameState", gameMaster.getGameState())
                     .put("highScoresGame", gameMaster.getHighScoresGame())
-                    .put("highScoresTotal", gameMaster.getHighScoresTotal());
+                    .put("highScoresTotal", gameMaster.getHighScoresTotal())
+                    .put("remainingTime", gameMaster.getRemainingTime());
 
             return ResponseEntity.ok(responseJSON.toString());
 
@@ -129,4 +140,31 @@ public class ServerMaster {
         }
     }
 
+
+    //WebSocket
+    /**
+     * This method is scheduled to run at specific intervals defined by the cron expression.
+     * It changes the game state to IN_LOBBY and broadcasts the updated game state to all connected clients.
+     */
+    @Scheduled(cron ="0 3,7,11,15,19,23,27,31,35,39,43,47,51,55,59 * * * ?") // Check every minute
+    public void scheduleTask() {
+        gameMaster.changeGameState(GAMESTATE.IN_LOBBY);
+        webSocketHandler.broadcastMessage(gameMaster.getGameState().toString());
+        gameMaster.startCountdown(60);
+    }
+
+    @Scheduled(cron = "0 0,4,8,12,16,20,24,28,32,36,40,44,48,52,56 * * * ?")
+    public void scheduleTask2() {
+        gameMaster.changeGameState(GAMESTATE.IN_PLAY);
+        webSocketHandler.broadcastMessage(gameMaster.getGameState().toString());
+        gameMaster.startCountdown(180);
+    }
+
+    @Scheduled(fixedDelay = 10 * 1000)
+    public void scheduleTask3() {
+        if(gameMaster.getGameState() != null)
+        {
+            webSocketHandler.broadcastMessage(gameMaster.getGameState().toString());
+        }
+    }
 }

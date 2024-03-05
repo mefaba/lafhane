@@ -9,8 +9,6 @@ public class Puzzle {
 
     private HashMap<String, Integer> answersHashMap; // word, point {"SZRSK": 1, "KRSZS": 2, "ZKSSR": 3, "SSZKR": 4,
                                                      // "RSKZS": 5}
-
-
     public Puzzle(String letters, List<String> answers) {
         this.answersHashMap = new HashMap<>();
         this.letters = letters;
