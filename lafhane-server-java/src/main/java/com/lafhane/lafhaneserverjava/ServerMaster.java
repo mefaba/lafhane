@@ -1,5 +1,6 @@
 package com.lafhane.lafhaneserverjava;
 
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.lafhane.lafhaneserverjava.config.WebSocketConfig.WebSocketHandler;
 import com.lafhane.lafhaneserverjava.dto.PlayerDTO;
 import com.lafhane.lafhaneserverjava.enums.GAMESTATE;
@@ -50,37 +51,41 @@ public class ServerMaster {
         return mongoClient;
     }
 
+    /**
+     * Description: Check
+     * 1.check if jwt token is valid. Existing User
+     * 2.check if username exist in db. Not existing User
+     * 3.create new user. Not existing User
+     * */
     @PostMapping("/api/login")
     public ResponseEntity<String> login(@RequestBody PlayerDTO playerDTO,
-            @RequestHeader("Authorization") String bearerToken) {
+            @RequestHeader(value="Authorization",  required = false) String bearerToken) {
         try {
-            System.out.println("login method called" + bearerToken);
-            String username = playerDTO.getUsername();
-            MongoDatabase database = mongoClient.getDatabase("lafhane");
-            MongoCollection<Document> collection = database.getCollection("players");
-            //collection.createIndex(new Document().append("username", 1).append("unique", true));//{ "username": 1 }, { unique: true }
-
-            // check if username exist in db
-            Document doc = collection.find(eq("username", username)).first();
-
-            // Player exist in DB. get jwt token from client to confirm user is logging from
-            // same device
-            if (doc != null) {
-                String jwtToken = bearerToken.substring(7); // Remove "Bearer " prefix;
-                // TODO DecodedJWT decodedJWT = jwtService.verifyToken(jwtToken);
-                gameMaster.AddPlayer(new Player(username));
+            String jwtToken = null;
+            DecodedJWT decodedJWT == null;
+            if (bearerToken != null && bearerToken.length() > 7) {
+                jwtToken = bearerToken.substring(7);// Remove "Bearer " prefix;
+                decodedJWT = jwtService.verifyToken(jwtToken);
+            }
+        
+            if(decodedJWT != null){
+                //We are able to verify JWT token. Get existing user from db.
+                JSONObject existingPlayer = playerService.getPlayerByUsername(playerDTO.getUsername());
+                //gameMaster.AddPlayer(new Player(playerDTO.getUsername()));
                 String response = new JSONObject().put("username", username).put("jwtToken", jwtToken).toString();
                 return ResponseEntity.ok(response);
             }
-            // Player does not exist in DB. Create a new player
-            else {
-                Player player = new Player(username);
-                InsertOneResult result = collection.insertOne(player.toDocument());
-                gameMaster.AddPlayer(player);
-                System.out.println("New Player " + player.getUserName() + " logged in.");
-                return ResponseEntity.ok("New Player " + player.getUserName() + " logged in.");
+            else if(playerService.isPlayerNameExist(playerDTO.getUsername())){
+                //Choose another username, this username exist in db
+                String response = new JSONObject().put("username", "").put("jwtToken", "").toString();
+                return ResponseEntity.ok(response);
             }
-
+            else{
+                //Create new user
+                Player newPlayer = playerService.createPlayer(playerDTO.getUsername());
+                gameMaster.AddPlayer(newPlayer);
+                String response = new JSONObject().put("username", newPlayer).put("jwtToken", jwtToken).toString();
+            }
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
@@ -123,16 +128,22 @@ public class ServerMaster {
             String username = "test1";
             //TODO Ensure that the player is in the game, playerlist
     
-            Map<String, Integer> checkResult = gameMaster.getPuzzle().checkAnswer(answer);
-            if(checkResult == null){
+            boolean checkResult = gameMaster.getPuzzle().checkAnswer(answer);
+            if(!checkResult){
                 return ResponseEntity.ok(new JSONObject()
                         .put("resultStatus", "wrong")
                         .put("resultData", "")
                         .toString());
             }
+            //save answer to the player's game data
+            gameMaster.getPlayer(username).gameData.addCorrectAnswer(answer);
+
+            //increase player's score
+            gameMaster.getPlayer(username).gameData.increaseScore(gameMaster.getPuzzle().getAnswerPoint(answer));
+
             return ResponseEntity.ok(new JSONObject()
                     .put("resultStatus", "correct")
-                    .put("resultData", checkResult.get(answer))
+                    .put("resultData", gameMaster.getPuzzle().getAnswerPoint(answer))
                     .toString());
             //JSONObject responseJSON = new JSONObject();
         } catch (Exception e) {
@@ -148,16 +159,15 @@ public class ServerMaster {
      */
     @Scheduled(cron ="0 3,7,11,15,19,23,27,31,35,39,43,47,51,55,59 * * * ?") // Check every minute
     public void scheduleTask() {
-        gameMaster.changeGameState(GAMESTATE.IN_LOBBY);
-        webSocketHandler.broadcastMessage(gameMaster.getGameState().toString());
-        gameMaster.startCountdown(60);
+        //END GAME  && START LOBBY
+        gameMaster.EndGame();
+        gameMaster.StartLobby();
     }
 
     @Scheduled(cron = "0 0,4,8,12,16,20,24,28,32,36,40,44,48,52,56 * * * ?")
     public void scheduleTask2() {
-        gameMaster.changeGameState(GAMESTATE.IN_PLAY);
-        webSocketHandler.broadcastMessage(gameMaster.getGameState().toString());
-        gameMaster.startCountdown(180);
+        //START GAME
+        gameMaster.StartGame();
     }
 
     @Scheduled(fixedDelay = 10 * 1000)

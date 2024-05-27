@@ -38,8 +38,8 @@ public class JwtService {
             JWTVerifier verifier = JWT.require(algorithm).build();
             return verifier.verify(token);
         } catch (JWTVerificationException exception) {
-            throw new RuntimeException("Invalid or expired JWT token");
-
+            //System.out.println("Invalid or expired JWT token");
+            return null;
         }
     }
 

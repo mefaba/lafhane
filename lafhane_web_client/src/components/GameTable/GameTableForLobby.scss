@@ -1,0 +1,189 @@
+.game_lobby_container {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  //height: 100vh;
+  height: 350px;
+  width: 100vw;
+  .game_lobby_container_inner {
+    padding: 10px;
+    background: linear-gradient(#4389a2, #5c258d);
+    display: grid;
+    //$grid-size: 100px;
+    grid-template-columns: 50px 50px 50px 50px;
+    grid-template-rows: 50px 50px 50px 50px;
+    column-gap: 10px;
+    row-gap: 10px;
+    @media (max-width: 500px) {
+      grid-template-columns: 25px 25px 25px 25px;
+      grid-template-rows: 25px 25px 25px 25px;
+    }
+    .game_lobby_chars {
+      font-weight: 300;
+      font-size: 48px;
+      text-transform: uppercase;
+      box-shadow: 0px 0px 8px -2px rgba(0, 0, 0, 0.87);
+      /* margin: auto; */
+      color: white;
+      background-color: rgba(134, 131, 131, 0.473);
+      vertical-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      user-select: none;
+      transition: all 0.1s;
+      transition-property: background-color;
+      &:active {
+        background-color: darken(rgba(134, 131, 131, 0.473), 20%);
+      }
+    }
+  }
+  .game_lobby_correct_answers {
+    display: block;
+    position: absolute;
+    height: 430px;
+    width: 200px;
+    top: 15%;
+    right: 10px;
+    border-radius: 10px;
+    background-color: rgb(111, 201, 255);
+    text-align: center;
+    overflow: scroll;
+    overflow-x: hidden;
+    @media screen and (max-width: 500px) {
+      width: 150px;
+      height: 330px;
+    }
+  }
+  .game_lobby_input_answer {
+    margin: 5px 25px;
+    display: flex;
+    text-align: center;
+    animation: slide-in-left 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+    input {
+      //width: 80%;
+      padding: 5px;
+      font-size: 20px;
+      //font-weight: 200;
+      background-color: #0003;
+      border: none;
+      border-radius: 5px;
+      box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.25) inset;
+      color: #fff;
+      @media screen and (max-width: 500px) {
+        pointer-events: none;
+      }
+    }
+    .btn {
+      color: rgb(255, 255, 255);
+      cursor: pointer;
+      margin-left: 2px;
+      text-decoration: none;
+      //text-transform: uppercase;
+      transition: all 0.2s;
+
+      &:hover {
+        color: black;
+      }
+    }
+    a {
+      text-decoration: none;
+    }
+  }
+}
+
+.button_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 5px 25px 0px 25px;
+  width: 300px;
+  user-select: none;
+  .button1 {
+    display: inline-block;
+    padding: 0.35em 1.2em;
+    border: 0.1em solid #ffffff;
+    margin: 0 0.3em 0.3em 0;
+    border-radius: 0.12em;
+    box-sizing: border-box;
+    text-decoration: none;
+    font-family: "Roboto", sans-serif;
+    font-weight: 300;
+    color: #ffffff;
+    text-align: center;
+    transition: all 0.2s;
+    cursor: pointer;
+
+    &:hover {
+      color: #000000;
+      background-color: #ffffff;
+    }
+  }
+
+  .button2 {
+    display: inline-block;
+    padding: 0.35em 1.2em;
+    border: 0.1em solid #ffffff;
+    margin: 0 0.3em 0.3em 0;
+    border-radius: 0.12em;
+    box-sizing: border-box;
+    text-decoration: none;
+    font-family: "Roboto", sans-serif;
+    font-weight: 300;
+    color: #000000;
+    text-align: center;
+    transition: all 0.2s;
+    cursor: pointer;
+
+    &:hover {
+      border-color: #000000;
+      color: #000000;
+      background-color: #999999;
+    }
+  }
+  .mobile_score {
+    display: inline-block;
+    padding: 0.35em 1.2em;
+    border: 0.1em solid #ffffff;
+    margin: 0 0.3em 0.3em 0;
+    border-radius: 0.12em;
+    box-sizing: border-box;
+    text-decoration: none;
+    font-family: "Roboto", sans-serif;
+    font-weight: 300;
+    color: #ffffff;
+    text-align: center;
+    transition: all 0.2s;
+    @media screen and (min-width: 500px) {
+      //display: none;
+    }
+  }
+}
+
+.game_lobby-container--appear {
+  transform: scale(0.1);
+}
+.game_lobby-container--appear-active {
+  transform: scale(1);
+  transition: transform 2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.game_lobby-container--appear-done {
+}
+
+.game_lobby-container--enter {
+}
+.game_lobby-container--enter-active {
+}
+.game_lobby-container--enter-done {
+}
+
+.game_lobby-container--exit {
+}
+.game_lobby-container--exit-active {
+  transform: rotateY(90deg) rotateX(45deg);
+  transition: transform 0.8s cubic-bezier(0.5, 0, 0.75, 0);
+}
+.game_lobby-container--exit-done {
+}

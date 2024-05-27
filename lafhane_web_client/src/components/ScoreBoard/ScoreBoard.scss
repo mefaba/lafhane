@@ -1,0 +1,27 @@
+#gamescore_board{
+    height: 300px;
+
+}
+
+#gamescore_board ul{
+    column-count: 2;
+    column-gap: 100px;
+}
+
+#gamescore_board h2{
+    text-align: center;
+}
+
+#highscore_board{
+    height: 300px;
+    text-align: center;
+}
+
+#highscore_board ul{
+    column-count: 2;
+    column-gap: 100px;
+}
+
+#highscore_board h2{
+    text-align: center;
+}

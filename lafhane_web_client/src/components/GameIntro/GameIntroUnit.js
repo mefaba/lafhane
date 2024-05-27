@@ -51,6 +51,7 @@ function GameIntroUnit() {
                 setGameView(gameViews.loginView);
             });
     };
+    
     const handleStart = () => {
         if (username.length > 3 && username.length < 11) {
             //check if username exists in database.

@@ -30,14 +30,12 @@ public class Puzzle {
 
 
     // Methods
-    public Map<String, Integer> checkAnswer(String answer) {
-        if(answersHashMap.containsKey(answer)) {
-            Integer answerPoint = answersHashMap.get(answer);
-            Map<String,Integer> answerMap = new HashMap<>();
-            answerMap.put(answer, answerPoint);
-            return answerMap;
-        }
-        return null;
+    public boolean checkAnswer(String answer) {
+        return answersHashMap.containsKey(answer);
+    }
+
+    public int getAnswerPoint(String answer) {
+        return answersHashMap.get(answer);
     }
 
     private void generateAnswerHashMap(List<String> answers) {

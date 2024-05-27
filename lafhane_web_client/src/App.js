@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import "./App.scss";
 import NavbarUnit from "./components/NavbarUnit";
 import GameTableUnit from "./components/GameTable/GameTableUnit";
@@ -7,14 +7,15 @@ import {GameContext} from "./context/GameContext";
 import {gameViews} from "./constants/game";
 import CountDownUnit from "./components/CountDown/CountDownUnit";
 import { api_get_game_data } from "./api/api_calls";
-import HighScoreBoard from "./components/ScoreBoard/HighScoreBoard";
-import GameScoreBoard from "./components/ScoreBoard/GameScoreBoard";
+import HighScoreBoardTotal from "./components/ScoreBoard/HighScoreBoardTotal";
+import HighScoreBoardGame from "./components/ScoreBoard/HighScoreBoardGame";
 import GameTableUnitForLobby from "./components/GameTable/GameTableUnitForLobby";
 import CorrectAnswersUnit from "./components/GameBoard/CorrectAnswersUnit";
 //import LeaderBoardUnit from "./components/LeaderBoard/LeaderBoardUnit";
 
 function App() {
     const {gameView, setPuzzleLetters, setRemainingTime} = useContext(GameContext); //development true, production false
+    const [route, setRoute] = useState("game_board");
  
     useEffect(()=>{
         const  socket = new WebSocket('ws://localhost:8080/ws');
@@ -60,20 +61,30 @@ function App() {
                 <div className="App">
                     <NavbarUnit />
                     <CountDownUnit/>
-                    <GameTableUnit />
-                    <div className="button_container">
-                         <div className="button2">SCORE</div>
+                    {route==="game_board" && <GameTableUnit /> }
+                    {route==="score_board" && <HighScoreBoardTotal/>}
+                    {route==="score_board" && <HighScoreBoardGame/>}
+                    <div className="button_container-63">
+                        <button onClick={()=>setRoute("game_board")} className="button-63">GAME BOARD</button>
+                        <button onClick={()=>setRoute("score_board")} className="button-63">SCORE BOARD</button>
                     </div>
+                
+              
                 </div>
             );
         case gameViews.lobbyView:
             return (
                 <div className="App">
                     <NavbarUnit />
-                    <GameTableUnitForLobby />
-                    <CorrectAnswersUnit />
-                    <HighScoreBoard/>
-                    {/* <GameScoreBoard/> */}
+                    <CountDownUnit/>
+                    {route==="game_board" && <GameTableUnitForLobby /> }
+                    {route==="game_board" &&   <CorrectAnswersUnit /> }
+                    {route==="score_board" && <HighScoreBoardTotal/>}
+                    {route==="score_board" && <HighScoreBoardGame/>}
+                    <div className="button_container-63">
+                        <button onClick={()=>setRoute("game_board")} className="button-63">GAME BOARD</button>
+                        <button onClick={()=>setRoute("score_board")} className="button-63">SCORE BOARD</button>
+                    </div>
                 </div>
             );
         case gameViews.errorView:

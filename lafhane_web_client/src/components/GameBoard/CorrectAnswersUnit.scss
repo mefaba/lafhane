@@ -1,0 +1,19 @@
+#correct-answers-unit{
+    display: flex;
+    flex-direction: column;
+    height: 250px;
+}
+
+#correct-answers-unit h2{
+    text-align: center;
+}
+#correct-answers-unit ul {
+    max-height: 200px;
+    column-count: 2;
+    column-gap: 90px;
+}
+
+#correct-answers-unit .correct_label{
+    color: rgb(0, 194, 0);
+    font-weight: bold;
+}

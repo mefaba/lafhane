@@ -20,13 +20,18 @@ public class PlayerGameData {
         this.currentScore = currentScore;
     }
 
-    private void increaseScore(int increment) {
+
+    public void increaseScore(int increment) {
         this.currentScore += increment;
-        // TODO implement here
     }
 
     private int calculatePoint(String answer) {
         // TODO implement here
         return 5;
+    }
+
+    public void reset(){
+        this.currentScore = 0;
+        this.correctAnswers.clear();
     }
 }

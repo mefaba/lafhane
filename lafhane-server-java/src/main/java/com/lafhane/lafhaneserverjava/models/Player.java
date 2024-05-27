@@ -4,17 +4,19 @@ import org.bson.Document;
 
 import java.util.Objects;
 
-
+@org.springframework.data.mongodb.core.mapping.Document(collection = "players")
 public class Player {
     private String id;
     private String username;
-    private PlayerGameData gameData;
+    public final PlayerGameData gameData;
 
     public Player(String username) {
         this.username = username;
+        this.gameData = new PlayerGameData();
     }
 
-    public String getUserName() {
+
+    public String getUsername() {
         return username;
     }
 
@@ -25,10 +27,6 @@ public class Player {
         } else {
             throw new IllegalArgumentException("Invalid username");
         }
-    }
-
-    public void setGameData(PlayerGameData gameData) {
-        this.gameData = gameData;
     }
 
     public PlayerGameData getGameData() {
