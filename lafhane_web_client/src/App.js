@@ -67,9 +67,7 @@ function App() {
                     <div className="button_container-63">
                         <button onClick={()=>setRoute("game_board")} className="button-63">GAME BOARD</button>
                         <button onClick={()=>setRoute("score_board")} className="button-63">SCORE BOARD</button>
-                    </div>
-                
-              
+                    </div>              
                 </div>
             );
         case gameViews.lobbyView:

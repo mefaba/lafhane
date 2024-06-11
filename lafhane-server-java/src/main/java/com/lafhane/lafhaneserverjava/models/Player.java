@@ -1,70 +1,53 @@
 package com.lafhane.lafhaneserverjava.models;
 
-import org.bson.Document;
 
-import java.util.Objects;
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@org.springframework.data.mongodb.core.mapping.Document(collection = "players")
+
+@Document(collection = "players")
 public class Player {
-    private String id;
+    @Id
+    private ObjectId id;
     private String username;
-    public final PlayerGameData gameData;
+    private String password;
+    private String gameDataId;
 
-    public Player(String username) {
+    public Player(String username, String password) {
         this.username = username;
-        this.gameData = new PlayerGameData();
+        this.password = password;
     }
 
+    public ObjectId getId() {
+        return id;
+    }
+
+    public void setId(ObjectId id) {
+        this.id = id;
+    }
 
     public String getUsername() {
         return username;
     }
 
-    public void setUserName(String name) {
-        // Add validation code here: required
-        if (name != null && !name.isEmpty()) {
-            this.username = name;
-        } else {
-            throw new IllegalArgumentException("Invalid username");
-        }
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public PlayerGameData getGameData() {
-        return gameData;
+    public String getGameDataId() {
+        return gameDataId;
     }
 
-    public Document toDocument() {
-        Document doc = new Document()
-                .append("username", this.username);
-        return doc;
+    public void setGameDataId(String gameDataId) {
+        this.gameDataId = gameDataId;
     }
 
-    // Utility Methods
-
-    /*
-     * equals() and hashcode() functions overriddn to make hashset playerList
-     * variable inside GameMaster to work properly.
-     * If not overriden, hashset will not be able to compare two player objects and
-     * will add same player multiple times.
-     */
-    @Override
-    public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
-        Player player = (Player) o;
-        return Objects.equals(username, player.username);
+    public String getPassword() {
+        return password;
     }
 
-    /*
-     * equals() and hashcode() functions overriddn to make hashset playerList
-     * variable inside GameMaster to work properly.
-     * If not overriden, hashset will not be able to compare two player objects and
-     * will add same player multiple times.
-     */
-    @Override
-    public int hashCode() {
-        return Objects.hash(username);
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

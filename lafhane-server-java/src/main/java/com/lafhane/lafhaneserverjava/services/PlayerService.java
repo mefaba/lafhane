@@ -1,9 +1,10 @@
 package com.lafhane.lafhaneserverjava.services;
 
 
+import com.lafhane.lafhaneserverjava.models.Player;
+import com.lafhane.lafhaneserverjava.repository.PlayerRepository;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.result.InsertOneResult;
 import org.bson.Document;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,35 +16,18 @@ import static com.mongodb.client.model.Filters.eq;
 public class PlayerService {
     //ATTRIBUTES
     private final MongoClient mongoClient;
+    private final PlayerRepository playerRepository;
     MongoCollection<Document> collection;
     //CONSTRUCTORS
     @Autowired
-    public PlayerService(MongoClient mongoClient) {
+    public PlayerService(MongoClient mongoClient, PlayerRepository playerRepository) {
         this.mongoClient = mongoClient;
         this.collection = mongoClient.getDatabase("lafhane").getCollection("players");
+        this.playerRepository = playerRepository;
     }
 
-    //GETTERS and SETTERS
-
-
-    //METHODS
-    public void loginNewPlayer() {
-        // TODO implement here
-    }
-
-
-    public void loginExistingPlayer() {
-        // TODO implement here
-    }
-
-
-    public void createPlayer(String username) {
-        // TODO implement here
-        //InsertOneResult result = collection.insertOne(username);
-          /*{
-            "acknowledged" : true,
-             "insertedId" : ObjectId("56fc40f9d735c28df206d078")
-        }*/
+    public Player savePlayer(Player player) {
+        return playerRepository.save(player);
     }
 
     public boolean isPlayerNameExist(String username) {

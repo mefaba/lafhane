@@ -1,51 +1,51 @@
 package com.lafhane.lafhaneserverjava.models;
 
-import java.util.HashMap;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 
+
+@Document(collection = "puzzles")
 public class Puzzle {
+    @Id
     private String letters; //"SZRSKKRSZSZKSSRSSZKRRSKZS" = ["SZRSK", "KRSZS", "ZKSSR", "SSZKR", "RSKZS]
+    private List<String> answersList; // <word, point> {"SZRSK": 1, "KRSZS": 2, "ZKSSR": 3, "SSZKR": 4,
 
-    private HashMap<String, Integer> answersHashMap; // word, point {"SZRSK": 1, "KRSZS": 2, "ZKSSR": 3, "SSZKR": 4,
-                                                     // "RSKZS": 5}
-    public Puzzle(String letters, List<String> answers) {
-        this.answersHashMap = new HashMap<>();
+
+    public Puzzle(String letters, List<String> answersList) {
         this.letters = letters;
-        this.generateAnswerHashMap(answers);
+        this.answersList = answersList;
     }
 
-    // Getters and Setters
     public String getLetters() {
         return letters;
     }
 
-
     public void setLetters(String letters) {
         this.letters = letters;
     }
-    public String toString() {
-        return letters;
+
+    public List<String> getAnswersList() {
+        return answersList;
     }
 
-
-    // Methods
-    public boolean checkAnswer(String answer) {
-        return answersHashMap.containsKey(answer);
+    public void setAnswersList(List<String> answersList) {
+        this.answersList = answersList;
     }
 
-    public int getAnswerPoint(String answer) {
-        return answersHashMap.get(answer);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Puzzle puzzle)) return false;
+        return Objects.equals(letters, puzzle.letters) && Objects.equals(answersList, puzzle.answersList);
     }
 
-    private void generateAnswerHashMap(List<String> answers) {
-        // TODO implement ALGORITHM here
-        //answersHashMap.put("sil",  "sil".length()*2-3);
-        int score;
-        for (int i = 0; i < answers.size(); i++) {
-            score = (answers.get(i).length() * 2-3);
-            answersHashMap.put(answers.get(i), score);
-        }
-        answersHashMap.put("sil",  "sil".length()*2-3);
+    @Override
+    public int hashCode() {
+        return Objects.hash(letters, answersList);
     }
 }
+

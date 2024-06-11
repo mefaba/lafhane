@@ -1,17 +1,18 @@
-package com.lafhane.lafhaneserverjava.services;
+package com.lafhane.lafhaneserverjava.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
-@Service
+
 public class JwtService {
     @Autowired
     private Environment env;
@@ -43,8 +44,8 @@ public class JwtService {
         }
     }
 
-    public String getUsernameFromToken(String token) {
-        DecodedJWT jwt = JWT.decode(token);
+    public String extractUsername(String token) {
+        DecodedJWT jwt = this.verifyToken(token);
         return jwt.getSubject();
     }
 }

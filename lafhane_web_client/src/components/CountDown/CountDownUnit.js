@@ -1,6 +1,5 @@
 import React from "react";
 import { useEffect } from "react";
-import axios from "axios";
 import { useState } from "react";
 import { useContext } from "react";
 import { GameContext } from "../../context/GameContext";

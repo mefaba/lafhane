@@ -13,6 +13,7 @@ import {gameViews} from "../../constants/game.js";
 
 function GameIntroUnit() {
     const {username, setUsername, setIsStarted, setGameView} = useContext(GameContext);
+    const [password, setPasword] = useState("");
     const [message, setMessage] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 
@@ -22,9 +23,10 @@ function GameIntroUnit() {
             "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
         axios
             .post(
-                `${process.env.REACT_APP_ACTIVESERVER}/api/login`,
+                `${process.env.REACT_APP_ACTIVESERVER}/login`,
                 {
                     username: username,
+                    password: password
                 },
                 {
                     headers: {
@@ -83,9 +85,9 @@ function GameIntroUnit() {
                         <p>Min length: 4, Max Length: 10</p>
                         <label htmlFor="username">Username: </label>
                         <input required minLength="4" type="text" id="username" onChange={(event) => setUsername(event.target.value)} />
-                        <br></br>
+                        <label htmlFor="username">Password: </label>
+                        <input required minLength="4" type="text" id="password" onChange={(event) => setPasword(event.target.value)} />
                         <button onClick={handleStart}>Start Game</button>
-
                         <p>{message}</p>
                     </div>
                 </>

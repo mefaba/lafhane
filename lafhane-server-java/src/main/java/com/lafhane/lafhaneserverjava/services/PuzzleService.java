@@ -7,20 +7,41 @@ import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PuzzleService {
-    private MongoClient mongoClient;
-    private MongoCollection<Document> collection;
+    private Puzzle puzzle;
     @Autowired
-    public void PuzzleService(MongoClient mongoClient) {
-        this.mongoClient = mongoClient;
+    private MongoClient mongoClient;
+
+    private MongoCollection<Document> collection;
+
+    //CONSTRUCTOR
+    public void PuzzleService() {
         this.collection = mongoClient.getDatabase("lafhane").getCollection("puzzles");
         // TODO implement here
     }
+
+    // Methods
     public Puzzle queryPuzzle(int index) {
         // TODO implement here
-        Document doc = collection.find().skip(index).limit(1).first();
-        Puzzle puzzle = new Puzzle(doc.getString("letters"), doc.getList("answers", String.class));
-        return puzzle;
+        Document doc = mongoClient.getDatabase("lafhane").getCollection("puzzles").find().skip(index).limit(1).first();
+        String letters = doc.getString("letters");
+        List<String> answers = doc.getList("answers", String.class);
+        this.puzzle = new Puzzle(letters, answers);
+        return this.puzzle;
     }
+
+
+
+    public int calculateAnswerPoint(String answer){
+        return answer.length() * 2-3;
+    }
+
+    public void generateAnswers(){
+
+    }
+
+
 }
