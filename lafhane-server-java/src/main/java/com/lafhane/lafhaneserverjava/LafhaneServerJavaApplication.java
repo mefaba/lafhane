@@ -12,13 +12,17 @@ public class LafhaneServerJavaApplication {
 		SpringApplication.run(LafhaneServerJavaApplication.class, args);
 	}
 
-	@Bean
-	public WebMvcConfigurer configure() {
-		return new WebMvcConfigurer() {
-			@Override
-			public void addCorsMappings(CorsRegistry reg) {
-				reg.addMapping("/**").allowedOrigins("*");
-			}
-		};
-	}
+//	@Bean
+//	public WebMvcConfigurer configure() {
+//		return new WebMvcConfigurer() {
+//			@Override
+//			public void addCorsMappings(CorsRegistry reg) {
+//				reg.addMapping("/**").allowedOrigins("http://localhost:3000")
+//				.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+//				.allowCredentials(true)
+//				.allowedHeaders("*");
+//			}
+//		};
+//	}
+
 }

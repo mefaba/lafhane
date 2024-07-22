@@ -1,26 +1,100 @@
 import axios from "axios";
+import Cookies from "universal-cookie";
 
+const cookies = new Cookies();
+
+export const axiosInstance = axios.create({
+    baseURL: process.env.REACT_APP_ACTIVESERVER, // Backend URL
+    headers: {
+        "Content-Type": "application/json",
+    },
+});
+
+// Add a request interceptor to include the token in headers
+axiosInstance.interceptors.request.use(
+    (config) => {
+        const token = getAuthToken();
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
+
+
+export const api_verify_token = () => {
+    return axiosInstance.get(`${process.env.REACT_APP_ACTIVESERVER}/api/verify-token`);
+}
 
 export const api_get_game_data = async () => {
-    return axios.get(`${process.env.REACT_APP_ACTIVESERVER}/api/gamedata`, {
+    return axiosInstance.get(`${process.env.REACT_APP_ACTIVESERVER}/api/gamedata`, {
         headers: {
-            "Authorization": `Bearer 12345`,
             "Access-Control-Allow-Origin": "*",
         },
-    })
+        withCredentials: true,
+        validateStatus: function (status) {
+            return status >= 200 && status < 300; // default, but added for clarity. Axios throws error if status is not between 200-299
+        },
+    });
+};
+
+export const api_post_check_answer = async (answer) => {
+    axiosInstance.post(
+        `${process.env.REACT_APP_ACTIVESERVER}/api/check_answer`,
+        {
+            answer: answer,
+        },
+        {
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+            },
+            validateStatus: function (status) {
+                return status >= 200 && status < 300; // default, but added for clarity. Axios throws error if status is not between 200-299
+            },
+        }
+    );
+};
+
+export const api_login =  (username, password) => {
+    return axiosInstance
+        .post(
+            `${process.env.REACT_APP_ACTIVESERVER}/login`,
+            {
+                username: username,
+                password: password,
+            },
+            {
+                withCredentials: true,
+                validateStatus: function (status) {
+                    return status >= 200 && status < 300; // default, but added for clarity. Axios throws error if status is not between 200-299
+                },
+            }
+        )
+        .then((res) => {
+            console.log("🚀 ~ .then ~ res:", res)
+            setAuthToken(res.data["jwt-token"]);
+            return res;
+        })
+        .catch((error) => {
+            console.log("Error:", error)
+            setAuthToken(null);
+        });
 };
 
 
-export const api_post_check_answer = async (answer) => {
-    axios
-        .post(`${process.env.REACT_APP_ACTIVESERVER}/api/check_answer`, {
-            answer: answer,
-        }, {
-            
-            headers: {
-                "Authorization": `Bearer 12345`,
-                "Access-Control-Allow-Origin": "*",
-            },
-        })
-}
 
+const setAuthToken = (token) => {
+    if (token !== null) {
+        cookies.set("jwt-token", token);
+    } else {
+        cookies.remove("jwt-token");
+    }
+};
+
+
+const getAuthToken = () => {
+    return cookies.get("jwt-token");
+}

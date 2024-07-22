@@ -1,14 +1,19 @@
 package com.lafhane.lafhaneserverjava;
 
 import com.lafhane.lafhaneserverjava.models.Player;
+import com.lafhane.lafhaneserverjava.models.Puzzle;
+import com.lafhane.lafhaneserverjava.security.JwtService;
 import com.lafhane.lafhaneserverjava.services.CountdownService;
 import com.lafhane.lafhaneserverjava.services.PlayerService;
 import org.json.JSONObject;
+import org.json.JSONString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,14 +28,16 @@ public class ServerMaster {
     private final PasswordEncoder passwordEncoder;
     private GameMaster gameMaster;
     private final PlayerService playerService;
+    private final JwtService jwtService;
 
     @Autowired
     public ServerMaster(PlayerService playerService,
-                        GameMaster gameMaster, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder) {
+                        GameMaster gameMaster, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, JwtService jwtService) {
         this.playerService = playerService;
         this.gameMaster = gameMaster;
         this.authenticationManager = authenticationManager;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     @PostMapping("/register")
@@ -40,43 +47,35 @@ public class ServerMaster {
         return ResponseEntity.ok(playerService.savePlayer(savedPlayer));
     }
 
-    /**
-     * Description: Check
-     * 1.check if jwt token is valid. Existing User
-     * 2.check if username exist in db. Not existing User
-     * 3.create new user. Not existing User
-     */
     @PostMapping("/login")
-    public ResponseEntity<Authentication> login(@RequestBody Player player) {
-        Authentication authenticationRequest = UsernamePasswordAuthenticationToken.unauthenticated(player.getUsername(), player.getPassword());
-
-        Authentication authenticationResponse = this.authenticationManager.authenticate(authenticationRequest);
-
-        return ResponseEntity.ok(authenticationResponse);
+    public ResponseEntity<?> login(@RequestBody Player player) {
+        UsernamePasswordAuthenticationToken unauthenticatedAuthObject = UsernamePasswordAuthenticationToken.unauthenticated(player.getUsername(), player.getPassword());
+        Authentication authenticatedAuthObject = this.authenticationManager.authenticate(unauthenticatedAuthObject);
+        SecurityContextHolder.getContext().setAuthentication(authenticatedAuthObject);
+        UserDetails userDetails = (UserDetails) authenticatedAuthObject.getPrincipal();
+        String jwt = jwtService.generateToken(userDetails.getUsername());
+        return ResponseEntity.ok(new JSONObject().put("jwt-token", jwt).toString());
     }
 
     @GetMapping("/api/gamedata")
-    public ResponseEntity<String> getGameTable(@RequestHeader("Authorization") String bearerToken) {
-        try {
-            //String jwtToken = bearerToken.substring(7); // Remove "Bearer " prefix;
-            // TODO DecodedJWT decodedJWT = jwtService.verifyToken(jwtToken);
-            //String username = jwtService.getUsernameFromToken(jwtToken);
-            String username = "test1";
-            //TODO Ensure that the player is in the game, playerlist
-            JSONObject responseJSON = new JSONObject()
-                    .put("username", username)
-                    .put("puzzle", gameMaster.getPuzzle().toString())
-                    .put("gameState", gameMaster.getGameState())
-                    .put("highScoresGame", gameMaster.getHighScoresGame())
-                    .put("highScoresTotal", gameMaster.getHighScoresTotal())
-                    .put("remainingTime", countdownService.getRemainingTime());
-
-            return ResponseEntity.ok(responseJSON.toString());
-
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
-        }
+    public ResponseEntity<?> getGameTable() {
+        String username = "test1";
+        //TODO Ensure that the player is in the game, playerlist
+        JSONObject responseJSON = new JSONObject()
+                .put("username", username)
+                .put("puzzle", gameMaster.getPuzzle().getLetters());
+                //.put("gameState", gameMaster.getGameState())
+                //.put("highScoresGame", gameMaster.getHighScoresGame())
+                //.put("highScoresTotal", gameMaster.getHighScoresTotal())
+                //.put("remainingTime", countdownService.getRemainingTime());
+        return ResponseEntity.ok(responseJSON.toString());
     }
+
+    @GetMapping("/api/verify-token")
+    public ResponseEntity<?> verifyToken() {
+        return ResponseEntity.ok(new JSONObject().put("isVerified", "true").toString());
+    }
+
 
 
     @PostMapping("/api/check_answer")

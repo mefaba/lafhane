@@ -27,6 +27,7 @@ public class PlayerService {
     }
 
     public Player savePlayer(Player player) {
+        //TODO check if username exist
         return playerRepository.save(player);
     }
 

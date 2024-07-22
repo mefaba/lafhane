@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
-
+@Service
 public class JwtService {
     @Autowired
     private Environment env;
@@ -39,7 +39,6 @@ public class JwtService {
             JWTVerifier verifier = JWT.require(algorithm).build();
             return verifier.verify(token);
         } catch (JWTVerificationException exception) {
-            //System.out.println("Invalid or expired JWT token");
             return null;
         }
     }

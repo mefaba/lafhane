@@ -6,47 +6,48 @@ import GameIntroUnit from "./components/GameIntro/GameIntroUnit";
 import {GameContext} from "./context/GameContext";
 import {gameViews} from "./constants/game";
 import CountDownUnit from "./components/CountDown/CountDownUnit";
-import { api_get_game_data } from "./api/api_calls";
+import { api_get_game_data, api_verify_token } from "./api/api_calls";
 import HighScoreBoardTotal from "./components/ScoreBoard/HighScoreBoardTotal";
 import HighScoreBoardGame from "./components/ScoreBoard/HighScoreBoardGame";
 import GameTableUnitForLobby from "./components/GameTable/GameTableUnitForLobby";
 import CorrectAnswersUnit from "./components/GameBoard/CorrectAnswersUnit";
-//import LeaderBoardUnit from "./components/LeaderBoard/LeaderBoardUnit";
+import useWebSocket from "./utils/useWebSocket";
 
 function App() {
-    const {gameView, setPuzzleLetters, setRemainingTime} = useContext(GameContext); //development true, production false
+    const {gameView, setGameView, setPuzzleLetters, setRemainingTime} = useContext(GameContext); //development true, production false
     const [route, setRoute] = useState("game_board");
- 
-    useEffect(()=>{
-        const  socket = new WebSocket('ws://localhost:8080/ws');
-        socket.onopen = function(event) {
-            console.log('WebSocket connection opened');
-            socket.send('Hello, server!');
-        };
     
-        socket.onmessage = function(event) {
-            console.log('Received message from server: ' + event.data);
-            api_get_game_data().then((response) => {
-                //console.log("🚀 App.js ~ api_get_game_data ~ response:", response)
-                const {puzzle, remainingTime} = response.data;
-                setPuzzleLetters(puzzle)
-                setRemainingTime(remainingTime);
-                
-            })
-            .catch((error) => {
-                console.log("🚀 ~ App ~ error:", error)
-            });
+    const handleWebSocketMessage = (data) => {
+        console.log("WebSocket message:", data);
+        // Additional logic based on the message
+        api_get_game_data().then((response) => {
+            console.log("🚀 App.js ~ onmessage ~ response:", response)
+            const {puzzle, remainingTime} = response.data;
+            setPuzzleLetters(puzzle)
+            setRemainingTime(remainingTime);
+            
+        })
+        .catch((error) => {
+            console.log("🚀 ~ App ~ error:", error)
+        });
 
-            /* if(event.data === "IN_PLAY"){
-                setGameView(gameViews.playView)
+    };
+
+    const handleWebSocketError = (error) => {
+        console.error("WebSocket error:", error);
+    };
+
+    useWebSocket('ws://localhost:8080/ws', handleWebSocketMessage, handleWebSocketError);
+    useEffect(() => {
+        api_verify_token().then((response) => {
+            const {isVerified} = response.data;
+            if(isVerified){
+                setGameView(gameViews.playView);
             }
-            else{
-                setGameView(gameViews.lobbyView)
-            } */
-           
-        };
-    },[])
-
+        }).catch((error) => {
+            console.log("App.js ~ api_verify_token ~ error:", error)
+        });
+    }, []);
 
     switch (gameView) {
         case gameViews.loginView:
