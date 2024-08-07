@@ -13,7 +13,7 @@ const CountDownUnit = () => {
   const seconds = localRemainingTime % 60 || 0;
   let myInterval = null;
 
-  useEffect(() => {
+  /* useEffect(() => {
     if(myInterval) clearInterval(myInterval);
     setLocalRemainingTime(remainingTime);
     myInterval = setInterval(() => {
@@ -25,7 +25,14 @@ const CountDownUnit = () => {
     }, 1000);
     return () => clearInterval(myInterval);
     // eslint-disable-next-line
+  }, [remainingTime]); */
+
+  useEffect(() => {
+    setLocalRemainingTime(remainingTime);
+    // eslint-disable-next-line
   }, [remainingTime]);
+
+    
 
   return (
     <div className="countdown_container">

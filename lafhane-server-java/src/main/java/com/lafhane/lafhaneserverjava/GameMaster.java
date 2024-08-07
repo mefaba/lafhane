@@ -1,39 +1,54 @@
 package com.lafhane.lafhaneserverjava;
 
 import com.lafhane.lafhaneserverjava.config.WebSocketConfig;
+import com.lafhane.lafhaneserverjava.dto.GameDataDTOWebSocket;
 import com.lafhane.lafhaneserverjava.enums.GAMESTATE;
+import com.lafhane.lafhaneserverjava.models.GameData;
+import com.lafhane.lafhaneserverjava.models.LiveData;
 import com.lafhane.lafhaneserverjava.models.Player;
 import com.lafhane.lafhaneserverjava.models.Puzzle;
-import com.lafhane.lafhaneserverjava.services.CountdownService;
+import com.lafhane.lafhaneserverjava.services.PlayerService;
 import com.lafhane.lafhaneserverjava.services.PuzzleService;
 import com.lafhane.lafhaneserverjava.services.ScoreService;
 
+import com.lafhane.lafhaneserverjava.types.PlayerScorePair;
+import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.annotation.Transient;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.UUID;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Component
 public class GameMaster {
-
+    private static final Logger logger = LoggerFactory.getLogger(GameMaster.class);
 
     private Puzzle puzzle;
-    private GAMESTATE gameState; // play, lobby
+    AtomicReference<GAMESTATE> gameState = new AtomicReference<>(GAMESTATE.IN_PLAY);
     private int remainingTime;
-    private String gameID;
     private HashSet<Player> playerList;
-    private HashMap<Player, Integer> highScoresGame;
-    private HashMap<Player, Integer> highScoresTotal;
+    private String gameID;
+    private List<PlayerScorePair> playerScoresGame;
+    private List<PlayerScorePair> playerScoresTotal;
 
+    private GameData gameDataRecord;
+
+    private PlayerService playerService;
     private PuzzleService puzzleService;
     private ScoreService scoreService;
     private WebSocketConfig.WebSocketHandler webSocketHandler;
 
     //CONSTRUCTOR
     @Autowired
-    public GameMaster(PuzzleService puzzleService, ScoreService scoreService, WebSocketConfig.WebSocketHandler webSocketHandler){
+    public GameMaster(PlayerService playerService, PuzzleService puzzleService, ScoreService scoreService, WebSocketConfig.WebSocketHandler webSocketHandler){
+        this.playerService = playerService;
         this.playerList = new HashSet<>();
         this.puzzleService = puzzleService;
         this.scoreService = scoreService;
@@ -48,29 +63,82 @@ public class GameMaster {
         }
         return null;
     }
+    // METHODS
 
-    public boolean checkAnswer(String answer) {
-        return this.puzzle.getAnswersList().contains(answer);
+
+    public boolean handleAnswer(String answer) {
+        try{
+            Player player = playerService.getPlayer();
+            boolean isAnswerCorrect = this.puzzle.getAnswersList().contains(answer);
+            if (isAnswerCorrect) {
+                scoreService.upsertLiveData(answer, player.getId());
+            }
+            return isAnswerCorrect;
+        }catch (UsernameNotFoundException e){
+            return false;
+        }
+        catch (Exception e) {
+            logger.error("An error occurred while handling the answer: {}", e.getMessage());
+            return false;
+        }
+
+    }
+
+    public LiveData getLiveData(){
+        Player player = playerService.getPlayer();
+        return scoreService.getLiveData(player.getId());
+    }
+
+    //This function called every second by countdown service
+    public void countdownServiceTimeSync(int remainingTime){
+        this.setRemainingTime(remainingTime);
+    }
+
+    @Scheduled(fixedRate = 1 * 1000)
+    public void deliverGameDataToPlayers(){
+        //create game data message
+        GameDataDTOWebSocket gameDataDTOWebSocket = new GameDataDTOWebSocket(
+                this.getRemainingTime(),
+                this.getGameState(),
+                this.getGameID()
+        );
+        //broadcast game data message to every player
+        webSocketHandler.broadcastMessage(gameDataDTOWebSocket);
     }
 
 
-    // METHODS
     public void StartGame() {
+        /*Initialize new game variables*/
+        this.setGameState(GAMESTATE.IN_PLAY);
         this.puzzle = puzzleService.queryPuzzle(0);
-        this.gameState = GAMESTATE.IN_PLAY;
+        this.gameID = new ObjectId().toString();
+        this.gameDataRecord = new GameData(this.getGameID());
+        setPlayerScoresGame(scoreService.getTopPlayersInGame());
+        setPlayerScoresTotal(scoreService.getTopPlayersInTotal());
 
-        //generate new game id
-        this.gameID = UUID.randomUUID().toString();
+        //create game data message
+        GameDataDTOWebSocket gameDataDTOWebSocket = new GameDataDTOWebSocket(
+                this.getRemainingTime(),
+                this.getGameState(),
+                this.getGameID()
+        );
+        //broadcast game data message to every player
+        webSocketHandler.broadcastMessage(gameDataDTOWebSocket);
+
         // TODO implement here
-        // Initiate GameData object for each user
         for (Player player : playerList) {
-            //player.getGameData().reset();
+
         }
         //Start CountDown
-        webSocketHandler.broadcastMessage(this.gameState.toString());
+
     }
 
     public void EndGame() {
+        //get live data of all players in game
+
+
+        //save their total scores in total score table
+
         //savePlayerGames
         scoreService.saveScores(playerList, gameID);
 
@@ -78,16 +146,35 @@ public class GameMaster {
 
         //update game scores
 
+
+        //save latest livedata of all players in game to score table
+
+
         for (Player player : playerList) {
             //player.getGameData().reset();
         }
 
-        // TODO implement here
+
+
+
+        //clean up
+        scoreService.cleanAllLiveData();
     }
 
     public void StartLobby() {
-        this.gameState = GAMESTATE.IN_LOBBY;
-        webSocketHandler.broadcastMessage(this.gameState.toString());
+        this.setGameState(GAMESTATE.IN_LOBBY);
+        //create game data message to boarcast
+        GameDataDTOWebSocket gameDataDTOWebSocket = new GameDataDTOWebSocket(
+                this.getRemainingTime(),
+                this.getGameState(),
+                this.getGameID()
+        );
+        setPlayerScoresGame(scoreService.getTopPlayersInGame());
+        setPlayerScoresTotal(scoreService.getTopPlayersInTotal());
+        //create game data for rest api endpoint that will be used for getting game scores
+
+        //broadcast game data message to every player
+        webSocketHandler.broadcastMessage(gameDataDTOWebSocket);
     }
 
     public void GetUserScore(String playerName, int score) {
@@ -110,6 +197,31 @@ public class GameMaster {
     public void RemovePlayer(Player player) {
         // TODO implement here
     }
+
+    public List<PlayerScorePair> getPlayerScoresGame() {
+        return playerScoresGame;
+    }
+
+    public void setPlayerScoresGame(List<PlayerScorePair> playerScoresGame) {
+        this.playerScoresGame = playerScoresGame;
+    }
+
+    public List<PlayerScorePair> getPlayerScoresTotal() {
+        return playerScoresTotal;
+    }
+
+    public void setPlayerScoresTotal(List<PlayerScorePair> playerScoresTotal) {
+        this.playerScoresTotal = playerScoresTotal;
+    }
+
+    public GameData getGameDataRecord() {
+        return gameDataRecord;
+    }
+
+    public void setGameDataRecord(GameData gameDataRecord) {
+        this.gameDataRecord = gameDataRecord;
+    }
+
 
     // xxx:  Getters and Setters
     public Puzzle getPuzzle() {
@@ -144,27 +256,13 @@ public class GameMaster {
         this.playerList = playerList;
     }
 
-    public HashMap<Player, Integer> getHighScoresGame() {
-        return highScoresGame;
-    }
 
-    public void setHighScoresGame(HashMap<Player, Integer> highScoresGame) {
-        this.highScoresGame = highScoresGame;
-    }
 
-    public HashMap<Player, Integer> getHighScoresTotal() {
-        return highScoresTotal;
-    }
-
-    public void setHighScoresTotal(HashMap<Player, Integer> highScoresTotal) {
-        this.highScoresTotal = highScoresTotal;
-    }
-
-    public GAMESTATE getGameState() {
-        return gameState;
+    public String getGameState() {
+        return gameState.get().toString();
     }
 
     public void setGameState(GAMESTATE gameState) {
-        this.gameState = gameState;
+        this.gameState.set(gameState);
     }
 }

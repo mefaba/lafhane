@@ -3,6 +3,7 @@ package com.lafhane.lafhaneserverjava.models;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 
@@ -10,9 +11,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Player {
     @Id
     private ObjectId id;
+
+    @Indexed(unique = true)
     private String username;
+
     private String password;
-    private String gameDataId;
 
     public Player(String username, String password) {
         this.username = username;
@@ -33,14 +36,6 @@ public class Player {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getGameDataId() {
-        return gameDataId;
-    }
-
-    public void setGameDataId(String gameDataId) {
-        this.gameDataId = gameDataId;
     }
 
     public String getPassword() {

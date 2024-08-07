@@ -1,12 +1,12 @@
 import React, {useState} from "react";
-import {gameViews} from "../constants/game";
+import {GameViews} from "../constants/game";
 /* import axios from "axios"; */
 
 export const GameContext = React.createContext();
 
 const GameProvider = (props) => {
     const [puzzleLetters, setPuzzleLetters] = useState([]); //["M", "O", "T", "H", "E", "R"
-    const [gameView, setGameView] = useState(gameViews.loginView); //gameViews.loginView, gameViews.playView, gameViews.scoreView, gameViews.errorView
+    const [gameView, setGameView] = useState(GameViews.loginView); //gameViews.loginView, gameViews.playView, gameViews.scoreView, gameViews.errorView
     const [remainingTime, setRemainingTime] = useState(0);
     const [currentStage, setCurrentStage] = useState("gameStage"); //gameStage & resultStage
     const [username, setUsername] = useState("");

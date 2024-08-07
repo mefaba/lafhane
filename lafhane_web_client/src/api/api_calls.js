@@ -41,9 +41,9 @@ export const api_get_game_data = async () => {
     });
 };
 
-export const api_post_check_answer = async (answer) => {
-    axiosInstance.post(
-        `${process.env.REACT_APP_ACTIVESERVER}/api/check_answer`,
+export const api_post_send_answer = (answer) => {
+    return axiosInstance.post(
+        `${process.env.REACT_APP_ACTIVESERVER}/api/send_answer`,
         {
             answer: answer,
         },
@@ -84,6 +84,37 @@ export const api_login =  (username, password) => {
         });
 };
 
+export const api_register =  (username, password) => {
+    return axiosInstance
+        .post(
+            `${process.env.REACT_APP_ACTIVESERVER}/register`,
+            {
+                username: username,
+                password: password,
+            },
+            {
+                withCredentials: true,
+                validateStatus: function (status) {
+                    return status >= 200 && status < 300; // default, but added for clarity. Axios throws error if status is not between 200-299
+                },
+            }
+        )
+        .then((res) => {
+            console.log("🚀 ~ .then ~ res:", res)
+            setAuthToken(res.data["jwt-token"]);
+            return res;
+        })
+        .catch((error) => {
+            console.log("Error:", error)
+            setAuthToken(null);
+            throw error;
+        });
+};
+
+export const api_get_livedata = () => {
+    return axiosInstance.get(`${process.env.REACT_APP_ACTIVESERVER}/api/livedata`);
+}
+
 
 
 const setAuthToken = (token) => {
@@ -98,3 +129,10 @@ const setAuthToken = (token) => {
 const getAuthToken = () => {
     return cookies.get("jwt-token");
 }
+
+export const removeAuthToken = () => {
+    cookies.remove("jwt-token");
+}
+
+
+

@@ -3,15 +3,23 @@ package com.lafhane.lafhaneserverjava.services;
 
 import com.lafhane.lafhaneserverjava.GameMaster;
 import com.lafhane.lafhaneserverjava.config.WebSocketConfig;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CountdownService {
+    private static final Logger logger = LoggerFactory.getLogger(CountdownService.class);
+
 
     @Autowired
     private WebSocketConfig.WebSocketHandler webSocketHandler;
+
     @Autowired
     private GameMaster gameMaster;
 
@@ -26,45 +34,36 @@ public class CountdownService {
             if (gameTime <= 0) {
                 gameInPlay = false;
                 lobbyTime = 60;
-                // Notify clients game over, send final scores, etc.
-                //END GAME  && START LOBBY
                 gameMaster.EndGame();
                 gameMaster.StartLobby();
-                System.out.println("[DEBUG]: game lobby");
-
+                logger.info("Game in Lobby");
             }
         } else {
             lobbyTime--;
             if (lobbyTime <= 0) {
                 gameInPlay = true;
                 gameTime = 180;
-                // Notify clients new game started, reset scores, etc.
-                //START GAME
                 gameMaster.StartGame();
-                System.out.println("[DEBUG]: game started");
-
+                logger.info("Game in Play");
             }
         }
+        gameMaster.countdownServiceTimeSync(this.getRemainingTime());
         // Update clients with the current countdown state
     }
 
 
-    @Scheduled(fixedDelay = 10 * 1000)
-    public void scheduleTask3() {
-        if(gameMaster.getGameState() != null)
-        {
-            webSocketHandler.broadcastMessage(gameMaster.getGameState().toString());
+    //@Scheduled(fixedDelay = 10 * 1000)
+    public void scheduleDeliverDataTask() {
+        try {
+
+        } catch (JSONException e) {
+            // Log the error or handle it appropriately
+            logger.error("Error creating JSON message", e);
         }
     }
-
 
     public int getRemainingTime(){
-        if(gameInPlay)
-        {
-            return  gameTime;
-        }
-        else{
-            return lobbyTime;
-        }
+        return gameInPlay ? gameTime : lobbyTime;
     }
 }
+

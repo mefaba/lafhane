@@ -1,6 +1,7 @@
 package com.lafhane.lafhaneserverjava.config;
 
 
+import com.lafhane.lafhaneserverjava.dto.GameDataDTOWebSocket;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -24,10 +25,9 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(new WebSocketHandler(), "/ws").setAllowedOrigins("*");
+        registry.addHandler(new WebSocketHandler(), "/ws").setAllowedOrigins("http://localhost:3000");
         //registry.addHandler(new WebSocketHandler2(), "/ws/remaining_time").setAllowedOrigins("*");
     }
-
 
     public class WebSocketHandler extends AbstractWebSocketHandler {
 
@@ -41,7 +41,8 @@ public class WebSocketConfig implements WebSocketConfigurer {
             sessions.remove(session);
         }
 
-        public void broadcastMessage(String message) {
+        public void broadcastMessage(GameDataDTOWebSocket gameDataDTOWebSocket) {
+            String message = gameDataDTOWebSocket.toJson();
             for (WebSocketSession session : sessions) {
                 try {
                     session.sendMessage(new TextMessage(message));

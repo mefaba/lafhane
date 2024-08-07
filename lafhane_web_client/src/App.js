@@ -1,92 +1,136 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useCallback, useContext, useEffect, useState} from "react";
 import "./App.scss";
 import NavbarUnit from "./components/NavbarUnit";
 import GameTableUnit from "./components/GameTable/GameTableUnit";
 import GameIntroUnit from "./components/GameIntro/GameIntroUnit";
 import {GameContext} from "./context/GameContext";
-import {gameViews} from "./constants/game";
+import {GameViews} from "./constants/game";
 import CountDownUnit from "./components/CountDown/CountDownUnit";
-import { api_get_game_data, api_verify_token } from "./api/api_calls";
+import {api_get_game_data, api_verify_token, removeAuthToken} from "./api/api_calls";
 import HighScoreBoardTotal from "./components/ScoreBoard/HighScoreBoardTotal";
 import HighScoreBoardGame from "./components/ScoreBoard/HighScoreBoardGame";
 import GameTableUnitForLobby from "./components/GameTable/GameTableUnitForLobby";
 import CorrectAnswersUnit from "./components/GameBoard/CorrectAnswersUnit";
 import useWebSocket from "./utils/useWebSocket";
+import Register from "./components/GameIntro/Register";
 
 function App() {
     const {gameView, setGameView, setPuzzleLetters, setRemainingTime} = useContext(GameContext); //development true, production false
+    const [gameId, setGameId] = useState(null);
     const [route, setRoute] = useState("game_board");
     
-    const handleWebSocketMessage = (data) => {
-        console.log("WebSocket message:", data);
-        // Additional logic based on the message
-        api_get_game_data().then((response) => {
-            console.log("🚀 App.js ~ onmessage ~ response:", response)
-            const {puzzle, remainingTime} = response.data;
-            setPuzzleLetters(puzzle)
-            setRemainingTime(remainingTime);
-            
-        })
-        .catch((error) => {
-            console.log("🚀 ~ App ~ error:", error)
-        });
 
-    };
-
-    const handleWebSocketError = (error) => {
-        console.error("WebSocket error:", error);
-    };
-
-    useWebSocket('ws://localhost:8080/ws', handleWebSocketMessage, handleWebSocketError);
-    useEffect(() => {
-        api_verify_token().then((response) => {
-            const {isVerified} = response.data;
-            if(isVerified){
-                setGameView(gameViews.playView);
+    const handleWebSocketMessage = useCallback(
+        (response) => {
+            const data = JSON.parse(response);
+            setRemainingTime(data.remainingTime);
+            setGameId(data.gameId);
+            if(gameView !== GameViews.loginView) {
+                setGameView(data.gameState === "IN_PLAY" ? GameViews.playView : GameViews.lobbyView);
             }
-        }).catch((error) => {
-            console.log("App.js ~ api_verify_token ~ error:", error)
-        });
+        },
+        [gameView,setGameView, setRemainingTime]
+    );
+
+    const handleWebSocketError = useCallback((error) => {
+        console.error("WebSocket error:", error);
     }, []);
 
+    const [socket] = useWebSocket("ws://localhost:8080/ws", handleWebSocketMessage, handleWebSocketError);
+    
+  
+    
+    useEffect(() => {
+        console.log("triggered");
+        api_verify_token()
+            .then((response) => {
+                const {isVerified} = response.data;
+                if (isVerified) {
+                    setGameView(GameViews.playView);
+                }
+            })
+            .catch((error) => {
+                console.log("App.js ~ api_verify_token ~ error:", error);
+                setGameView(GameViews.loginView);
+            });
+    }, []);
+
+    const Logout = () => {
+        console.log("🚀 ~ Logout ~ Logout:", Logout)
+        setGameView(GameViews.loginView);
+        removeAuthToken();
+        socket.close()
+    };
+
+
     switch (gameView) {
-        case gameViews.loginView:
+        case GameViews.loginView:
             return (
                 <div className="App">
                     <NavbarUnit />
                     <GameIntroUnit />
-                </div>
+                </div>                
             );
-        case gameViews.playView:
+        case GameViews.registerView:
             return (
                 <div className="App">
                     <NavbarUnit />
-                    <CountDownUnit/>
-                    {route==="game_board" && <GameTableUnit /> }
-                    {route==="score_board" && <HighScoreBoardTotal/>}
-                    {route==="score_board" && <HighScoreBoardGame/>}
-                    <div className="button_container-63">
-                        <button onClick={()=>setRoute("game_board")} className="button-63">GAME BOARD</button>
-                        <button onClick={()=>setRoute("score_board")} className="button-63">SCORE BOARD</button>
-                    </div>              
+                    <Register/>
                 </div>
             );
-        case gameViews.lobbyView:
+        case GameViews.playView:
             return (
                 <div className="App">
                     <NavbarUnit />
-                    <CountDownUnit/>
-                    {route==="game_board" && <GameTableUnitForLobby /> }
-                    {route==="game_board" &&   <CorrectAnswersUnit /> }
-                    {route==="score_board" && <HighScoreBoardTotal/>}
-                    {route==="score_board" && <HighScoreBoardGame/>}
+                    <CountDownUnit />
+                    {route === "game_board" && <GameTableUnit />}
+                    {route === "score_board" && <HighScoreBoardTotal />}
+                    {route === "score_board" && <HighScoreBoardGame />}
                     <div className="button_container-63">
-                        <button onClick={()=>setRoute("game_board")} className="button-63">GAME BOARD</button>
-                        <button onClick={()=>setRoute("score_board")} className="button-63">SCORE BOARD</button>
+                        {route === "score_board" ? (
+                            <button onClick={() => setRoute("game_board")} className="button-63">
+                                BACK
+                            </button>
+                        ) : (
+                            <>
+                            <button onClick={() => setRoute("score_board")} className="button-63">
+                                SCORE BOARD
+                            </button>
+                            <button onClick={Logout}  className="button-63"> LOGOUT</button>
+                            </>
+                        )}
+                           
                     </div>
                 </div>
             );
-        case gameViews.errorView:
+        case GameViews.lobbyView:
+            return (
+                <div className="App">
+                    <NavbarUnit />
+                    <CountDownUnit />
+                    {route === "game_board" && <GameTableUnitForLobby />}
+                    {route === "game_board" && <CorrectAnswersUnit />}
+                    {route === "score_board" && <HighScoreBoardTotal />}
+                    {route === "score_board" && <HighScoreBoardGame />}
+                    <div className="button_container-63">
+                        {route === "score_board" ? (
+                            <button onClick={() => setRoute("game_board")} className="button-63">
+                                BACK
+                            </button>
+                        ) : (
+                            <>
+                            <button onClick={() => setRoute("score_board")} className="button-63">
+                                SCORE BOARD
+                            </button>
+                            <button onClick={Logout}  className="button-63"> LOGOUT</button>
+                            </>
+                        )}
+                           
+                    </div>
+                    
+                </div>
+            );
+        case GameViews.errorView:
             return (
                 <div className="App">
                     <NavbarUnit />

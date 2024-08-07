@@ -1,30 +1,37 @@
-import { useEffect } from 'react';
+import {useEffect, useRef, useState} from "react";
 
 function useWebSocket(url, onMessage, onError) {
+    const socketRef = useRef(null);
     useEffect(() => {
-        const socket = new WebSocket(url);
-
-        socket.onopen = () => {
+        socketRef.current = new WebSocket(url);
+        socketRef.current.onopen = () => {
             console.log('WebSocket connection opened');
-            socket.send('Hello, server!');
+            socketRef.current.send('Hello, server!');
         };
 
-        socket.onmessage = event => {
-            console.log('Received message from server: ', event.data);
+        socketRef.current.onmessage = event => {
+            //console.log('WebSocket message:', event.data);
             onMessage(event.data);
         };
 
-        socket.onerror = error => {
+        socketRef.current.onerror = error => {
             console.error('WebSocket error:', error);
             onError(error);
         };
 
-        // Cleanup function
+        socketRef.current.onclose = () => {
+            console.log('WebSocket closed');
+        };
+
         return () => {
-            socket.close();
-            console.log('WebSocket connection closed');
+            if (socketRef.current) {
+                socketRef.current.close();
+                console.log('WebSocket connection closed');
+            }
         };
     }, [url, onMessage, onError]);
+
+    return [socketRef.current];
 }
 
 export default useWebSocket;

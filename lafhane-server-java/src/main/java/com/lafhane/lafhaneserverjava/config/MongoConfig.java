@@ -29,4 +29,9 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
     protected String getDatabaseName() {
         return "lafhane";
     }
+
+    @Override
+    protected boolean autoIndexCreation() {
+        return true;
+    }
 }

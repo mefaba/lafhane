@@ -7,7 +7,7 @@ import "./GameIntro.scss";
 import LottieLoading from "./LottieLoading.js";
 //import Slideshow from "./Slideshow";
 import Accordion from "./Accordion";
-import {gameViews} from "../../constants/game.js";
+import {GameViews} from "../../constants/game.js";
 import {api_login} from "../../api/api_calls.js";
 
 function GameIntroUnit() {
@@ -23,16 +23,16 @@ function GameIntroUnit() {
                     console.log("🚀 ~ login ~ response:", response);
                     if (response) {
                         // Delay the view change to playView by 1 second if login is successful
-                        setTimeout(() => setGameView(gameViews.playView), 1000);
+                        setTimeout(() => setGameView(GameViews.playView), 1000);
                     }
                 })
                 .catch((error) => {
                     console.log("Error:", error);
                     setUsername("");
-                    setGameView(gameViews.loginView);
+                    setGameView(GameViews.loginView);
                 });
             setIsLoading(true);
-            setMessage("Hoşgeldiniz yada Tekrar Deneyin. Bu isimde bir kullanıcı zaten oyunda olabilir. Farklı bir isim deneyin.");
+            setMessage("We are unable to fullfill login request. Try again or Register");
         }
 
         setTimeout(() => {
@@ -52,14 +52,15 @@ function GameIntroUnit() {
             ) : (
                 <>
                     <div className="main-intro">
-                        <h2>Lafhane</h2>
+                        <h2>Login</h2>
                         <p>Min length: 4, Max Length: 10</p>
                         <label htmlFor="username">Username: </label>
                         <input required minLength="4" type="text" id="username" onChange={(event) => setUsername(event.target.value)} />
                         <label htmlFor="username">Password: </label>
                         <input required minLength="4" type="text" id="password" onChange={(event) => setPasword(event.target.value)} />
-                        <button onClick={handleStart}>Start Game</button>
+                        <button className="button-63" onClick={handleStart}>PLAY</button>
                         <p>{message}</p>
+                        <div onClick={() => setGameView(GameViews.registerView)} className="custom_link">Register</div>
                     </div>
                 </>
             )}

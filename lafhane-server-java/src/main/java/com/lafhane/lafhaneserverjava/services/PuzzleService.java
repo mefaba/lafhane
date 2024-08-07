@@ -35,9 +35,7 @@ public class PuzzleService {
 
 
 
-    public int calculateAnswerPoint(String answer){
-        return answer.length() * 2-3;
-    }
+
 
     public void generateAnswers(){
 

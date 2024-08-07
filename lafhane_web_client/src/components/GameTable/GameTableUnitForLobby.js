@@ -3,7 +3,7 @@ import "./GameTableForLobby.scss";
 import {GameContext} from "../../context/GameContext.js";
 import {useContext} from "react";
 import {CSSTransition} from "react-transition-group";
-import { api_get_game_data, api_post_check_answer } from "../../api/api_calls.js";
+import { api_get_game_data } from "../../api/api_calls.js";
 
 const gameData = {
     puzzle: "irpnnsiletbfooie",
@@ -33,9 +33,9 @@ const GameTableUnitForLobby = () => {
     const getGameData = async () => {
         await api_get_game_data()
             .then((response) => {
-                const {puzzle, remainingTime} = response.data;
+                const {puzzleLetters, remainingTime} = response.data;
                 console.log("🚀 ~ .GameTableUnit ~ remainingTime:", remainingTime)
-                setPuzzleLetters(puzzle);
+                setPuzzleLetters(puzzleLetters);
                 setRemainingTime(remainingTime);
             })
             .catch((error) => {

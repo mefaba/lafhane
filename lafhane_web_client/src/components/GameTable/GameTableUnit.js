@@ -1,10 +1,8 @@
 import React, {useState, useEffect} from "react";
 import "./GameTable.scss";
-import {GameContext} from "../../context/GameContext.js";
 import {ReactComponent as SvgButton} from "../../assets/arrow-right-circle.svg";
-import {useContext} from "react";
 import {CSSTransition} from "react-transition-group";
-import { api_get_game_data, api_post_check_answer } from "../../api/api_calls.js";
+import {api_get_game_data, api_post_send_answer} from "../../api/api_calls.js";
 
 const gameData = {
     puzzle: "irpnnsiletbfooie",
@@ -81,38 +79,46 @@ const GameTableUnit = () => {
     const [score, setScore] = useState(0);
     const [currentAnswer, setCurrentAnswer] = useState("");
     const [puzzleLetters, setPuzzleLetters] = useState("");
-    const {setRemainingTime} = useContext(GameContext);
+    const [validAnswers, setValidAnswers] = useState([]);
 
-    const getGameData = async () => {
-        await api_get_game_data()
+    useEffect(() => {
+        const fetchGameData = async () => {
+            try {
+                const response = await api_get_game_data();
+                console.log("🚀 ~ fetchGameData ~ response:", response)
+                const {puzzleLetters} = response.data;
+                setPuzzleLetters(puzzleLetters);
+            } catch (error) {
+                console.error("Failed to fetch game data:", error);
+            }
+        };
+
+        fetchGameData();
+    }, []);
+
+    const sendAnswer = () => {
+        //dont send duplicate answer
+        if (validAnswers.includes(currentAnswer)) {
+            console.log("Duplicate Answer");
+            return
+        }
+        api_post_send_answer(currentAnswer)
             .then((response) => {
-                const {puzzle, remainingTime} = response.data;
-                console.log("🚀 ~ .GameTableUnit ~ remainingTime:", remainingTime)
-                setPuzzleLetters(puzzle);
-                setRemainingTime(remainingTime);
+                const {result} = response.data;
+                if (result === "correct") {
+                    setValidAnswers([...validAnswers, currentAnswer]);
+                    setScore(response.data.score);
+                }
             })
             .catch((error) => {
-                console.log("🚀 ~ getGameData ~ error", error);
+                console.log("🚀 ~ sendAnswer ~ error:", error)
             });
     };
 
-    const checkAnswer = async () => {
-        await api_post_check_answer(currentAnswer)
-            .then((response) => {
-                const {resultStatus, resultData} = response.data;
-                if (resultStatus === "correct") {
-                    //Update score
-                    setScore(resultData);
-                }
-            })
-            .catch((error) => {});
+    const handleAnswerSubmit = () => {
+        sendAnswer();
+        setCurrentAnswer("");
     };
-
-
-    useEffect(() => {
-        getGameData();
-        // eslint-disable-next-line
-    }, []);
 
     const handleInputChange = (e) => {
         setCurrentAnswer(e.target.value);
@@ -120,10 +126,7 @@ const GameTableUnit = () => {
     const handleTouchPress = (recieved_char) => {
         setCurrentAnswer(currentAnswer + recieved_char);
     };
-    const handleAnswerSubmit = () => {
-        checkAnswer();
-        setCurrentAnswer("");
-    };
+
     return (
         <div className="game_container">
             <div className="button_container">
@@ -160,6 +163,12 @@ const GameTableUnit = () => {
                 <div className="btn" onClick={handleAnswerSubmit}>
                     <SvgButton />
                 </div>
+            </div>
+
+            <div>
+                {validAnswers.map((answer, index) => (
+                    <div key={index}>{answer}</div>
+                ))}
             </div>
         </div>
     );
