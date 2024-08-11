@@ -25,3 +25,152 @@
 #highscore_board h2{
     text-align: center;
 }
+
+.leaderboard {
+    background-color: rgb(15, 32, 49);
+    color: #eee;
+    width: 300px;
+    border-radius: 5px;
+    top: 20%;
+    box-shadow: 2px 5px 15px rgba(#123, .5);
+    text-align: left;
+    display: inline-block;
+    vertical-align: middle;
+  
+    h2 {
+      padding: 15px 0;
+      margin: 0;
+      text-align: center;
+    }
+  
+    p {
+      margin: 3px 10px;
+      text-align: right;
+      color: #567;
+    }
+  
+    ol {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      height: 200px; // Adjust the height as needed
+      overflow-y: auto; // Enable vertical scrolling
+  
+      // Custom scrollbar styles
+      &::-webkit-scrollbar {
+        width: 8px; // Width of the scrollbar
+      }
+  
+      &::-webkit-scrollbar-thumb {
+        background-color: #567; // Color of the scrollbar thumb
+        border-radius: 4px; // Rounded corners for the scrollbar thumb
+      }
+  
+      &::-webkit-scrollbar-track {
+        background-color: #123; // Color of the scrollbar track
+      }
+  
+      li {
+        counter-increment: leaderboard-num;
+        padding: 15px 50px;
+        position: relative;
+        transition-duration: .3s;
+        background-color: rgb(42, 53, 65);
+        border-bottom: 0.5px solid rgb(0, 0, 0);
+  
+        &::before {
+          content: counter(leaderboard-num);
+          display: block;
+          border-radius: 50%;
+          width: 20px;
+          height: 20px;
+          background-color: white;
+          color: #345;
+          text-align: center;
+          position: absolute;
+          left: 15px;
+        }
+  
+  
+        .percent {
+          position: absolute;
+          right: 15px;
+        }
+      }
+    }
+  }
+
+  .game_leaderboard {
+    background-color: #ee5f00; // Dynamic orange background
+    color: #fff;
+    width: 300px;
+    border-radius: 5px;
+    top: 20%;
+    box-shadow: 2px 5px 15px rgba(#FF851B, .5);
+    text-align: left;
+    display: inline-block;
+    vertical-align: middle;
+  
+    h2 {
+      padding: 15px 0;
+      margin: 0;
+      text-align: center;
+    }
+  
+    p {
+      margin: 3px 10px;
+      text-align: right;
+      color: #FFDDC1; // Light orange for text
+    }
+  
+    ol {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      height: 200px; // Adjust the height as needed
+      overflow-y: auto; // Enable vertical scrolling
+  
+      // Custom scrollbar styles
+      &::-webkit-scrollbar {
+        width: 8px; // Width of the scrollbar
+      }
+  
+      &::-webkit-scrollbar-thumb {
+        background-color: #FFB347; // Orange color of the scrollbar thumb
+        border-radius: 4px; // Rounded corners for the scrollbar thumb
+      }
+  
+      &::-webkit-scrollbar-track {
+        background-color: #FF851B; // Orange color of the scrollbar track
+      }
+  
+      li {
+        counter-increment: leaderboard-num;
+        padding: 15px 50px;
+        position: relative;
+        transition-duration: .3s;
+        background-color: #448c9e; // Default orange background color
+        border-bottom: 1px solid rgb(255, 255, 255); // Light orange border for separation
+  
+        &::before {
+          content: counter(leaderboard-num);
+          display: block;
+          border-radius: 50%;
+          width: 20px;
+          height: 20px;
+          background-color: white;
+          color: #FF851B;
+          text-align: center;
+          position: absolute;
+          left: 15px;
+        }
+  
+
+  
+        .percent {
+          position: absolute;
+          right: 15px;
+        }
+      }
+    }
+  }

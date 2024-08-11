@@ -1,36 +1,44 @@
-import React, {useState}  from 'react';
+import React, {useState, useContext} from "react";
 import "./ScoreBoard.scss";
+import { GameContext } from "../../context/GameContext";
 
 const mock_highscores = [
-    { "Alice": 150 },
-    { "Bob": 120 },
-    { "Charlie": 110 },
-    { "David": 100 },
-    { "Eve": 90 },
-    { "Frank": 85 },
-    { "Grace": 80 },
-    { "Hank": 75 },
-    { "Ivy": 70 },
-    { "Jack": 65 }
-  ];
+  {"playerName": "Alice", "score": 150},
+  {"playerName": "Bob", "score": 120},
+  {"playerName": "Charlie", "score": 110},
+  {"playerName": "David", "score": 100},
+  {"playerName": "Eve", "score": 90},
+  {"playerName": "Frank", "score": 85},
+  {"playerName": "Grace", "score": 80},
+  {"playerName": "Hank", "score": 75},
+  {"playerName": "Ivy", "score": 70},
+  {"playerName": "Jack", "score": 65}
+]
 const HighScoreBoardTotal = () => {
-    const [highscores, setHighscores] = useState(mock_highscores);
-  return (
-    <div id='highscore_board'>
-      <h2>High Scores</h2>
-      <ul>
-        {highscores.map((score, index) => {
-          const playerName = Object.keys(score)[0];
-          const playerScore = score[playerName];
-          return (
-            <li key={index}>
-              {playerName}: {playerScore}
-            </li>
-          );
-        })}
-      </ul>
-    </div>
-  );
+    //const [highscores, setHighscores] = useState(mock_highscores);
+    const {scoresTotal}= useContext(GameContext); 
+    return (
+        <div id="highscore_board">
+            <div className="leaderboard">
+                <h2>
+                    Leaderboard 
+                </h2>
+                <ol>
+                    {scoresTotal.map((eachdata, index) => {
+                        return (
+                            <li key={index}>
+                                <span className="name">{eachdata.playerName}</span>
+                                <span className="percent">{eachdata.score}</span>
+                            </li>
+                        );
+                    })}
+                </ol>
+                <p>
+                    <small>Daily Score</small>
+                </p>
+            </div>
+        </div>
+    );
 };
 
 export default HighScoreBoardTotal;

@@ -14,16 +14,20 @@ public class GameDataDTOHTTP  {
     private String gameState;
     private int remainingTime;
     private String puzzleLetters;
+    private List<String> puzzleAnswerList;
     private List<PlayerScorePair> playerScoresGame;
     private List<PlayerScorePair> playerScoresTotal;
+    List<String> correctAnswers;
 
-    public GameDataDTOHTTP(String gameId, String gameState, int remainingTime, String puzzleLetters, List<PlayerScorePair> playerScoresGame, List<PlayerScorePair> playerScoresTotal) {
+    public GameDataDTOHTTP(String gameId, String gameState, int remainingTime, String puzzleLetters, List<String> puzzleAnswerList, List<PlayerScorePair> playerScoresGame, List<PlayerScorePair> playerScoresTotal, List<String> correctAnswers) {
         this.gameId = gameId;
         this.gameState = gameState;
         this.remainingTime = remainingTime;
         this.puzzleLetters = puzzleLetters;
+        this.puzzleAnswerList = puzzleAnswerList;
         this.playerScoresGame = playerScoresGame;
         this.playerScoresTotal = playerScoresTotal;
+        this.correctAnswers = correctAnswers;
     }
 
 
@@ -61,5 +65,11 @@ public class GameDataDTOHTTP  {
         this.playerScoresTotal = playerScoresTotal;
     }
 
+    public List<String> getCorrectAnswers() {
+        return correctAnswers;
+    }
 
+    public void setCorrectAnswers(List<String> correctAnswers) {
+        this.correctAnswers = correctAnswers;
+    }
 }

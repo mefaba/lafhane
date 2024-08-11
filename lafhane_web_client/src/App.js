@@ -15,9 +15,10 @@ import useWebSocket from "./utils/useWebSocket";
 import Register from "./components/GameIntro/Register";
 
 function App() {
-    const {gameView, setGameView, setPuzzleLetters, setRemainingTime} = useContext(GameContext); //development true, production false
+    const {gameView, setGameView,  setRemainingTime} = useContext(GameContext); //development true, production false
     const [gameId, setGameId] = useState(null);
     const [route, setRoute] = useState("game_board");
+    const [isVerified, setIsVerified] = useState(false);
     
 
     const handleWebSocketMessage = useCallback(
@@ -25,11 +26,11 @@ function App() {
             const data = JSON.parse(response);
             setRemainingTime(data.remainingTime);
             setGameId(data.gameId);
-            if(gameView !== GameViews.loginView) {
+            if(isVerified) {
                 setGameView(data.gameState === "IN_PLAY" ? GameViews.playView : GameViews.lobbyView);
             }
         },
-        [gameView,setGameView, setRemainingTime]
+        [isVerified,setGameView, setRemainingTime]
     );
 
     const handleWebSocketError = useCallback((error) => {
@@ -47,11 +48,13 @@ function App() {
                 const {isVerified} = response.data;
                 if (isVerified) {
                     setGameView(GameViews.playView);
+                    setIsVerified(true);
                 }
             })
             .catch((error) => {
                 console.log("App.js ~ api_verify_token ~ error:", error);
                 setGameView(GameViews.loginView);
+                setIsVerified(false);
             });
     }, []);
 

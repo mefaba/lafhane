@@ -6,8 +6,6 @@ import com.lafhane.lafhaneserverjava.models.Player;
 import com.lafhane.lafhaneserverjava.security.JwtService;
 import com.lafhane.lafhaneserverjava.services.CountdownService;
 import com.lafhane.lafhaneserverjava.services.PlayerService;
-import com.lafhane.lafhaneserverjava.types.ApiResponse;
-import com.mongodb.DuplicateKeyException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,7 +15,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -72,8 +69,11 @@ public class ServerMaster {
                 gameMaster.getGameState(),
                 gameMaster.getRemainingTime(),
                 gameMaster.getPuzzle().getLetters(),
+                gameMaster.grabPuzzleAnswersList(),
                 gameMaster.getPlayerScoresGame(),
-                gameMaster.getPlayerScoresTotal());
+                gameMaster.getPlayerScoresTotal(),
+                gameMaster.getLiveData().getCorrectAnswers()
+        );
 
         return ResponseEntity.ok(response.toJson());
     }
@@ -81,6 +81,11 @@ public class ServerMaster {
     @GetMapping("/api/verify-token")
     public ResponseEntity<?> verifyToken() {
         return ResponseEntity.ok(new JSONObject().put("isVerified", "true").toString());
+    }
+
+    @GetMapping("/")
+    public String getServer(){
+        return "Server is up and running!";
     }
 
 

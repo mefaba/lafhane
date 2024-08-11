@@ -45,7 +45,11 @@ public class LiveData {
     }
 
     public List<String> getCorrectAnswers() {
-        return correctAnswers;
+        return this.correctAnswers;
+    }
+
+    public ObjectId getPlayerId() {
+        return playerId;
     }
 
     // Method to add a correct answer

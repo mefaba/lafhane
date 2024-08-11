@@ -61,4 +61,15 @@ public class PlayerService {
         return doc != null;
     }
 
+    public static String getPlayerNameById(PlayerRepository playerRepository,String playerId) {
+        try {
+            Player player = playerRepository.findById(playerId)
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + playerId));
+            return player.getUsername();
+        } catch (Exception e) {
+            logger.error("Error retrieving player name for id: " + playerId, e);
+            throw new RuntimeException("Failed to retrieve player name", e);
+        }
+    }
+
 }

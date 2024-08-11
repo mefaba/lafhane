@@ -1,7 +1,21 @@
-#correct-answers-unit{
+#correct-answers-unit {
+    box-sizing: border-box;
+    padding: 10px;
+    box-shadow: 4px 3px 7px rgba(11, 0, 107, 0.4);
+    min-height: 30px;
+    width: 300px;
+    height: 250px;
+    position: relative;
     display: flex;
     flex-direction: column;
-    height: 250px;
+    overflow-y: auto;
+    user-select: none;
+}
+
+.answers-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
 }
 
 #correct-answers-unit h2{
@@ -16,4 +30,18 @@
 #correct-answers-unit .correct_label{
     color: rgb(0, 194, 0);
     font-weight: bold;
+}
+
+#correct-answers-unit::-webkit-scrollbar {
+    width: 6px; /* Width of the entire scrollbar */
+}
+
+#correct-answers-unit::-webkit-scrollbar-track {
+    background: transparent; /* Color of the tracking area */
+}
+
+#correct-answers-unit::-webkit-scrollbar-thumb {
+    background-color: rgba(155, 155, 155, 0.7); /* Color of the scroll thumb */
+    border-radius: 20px; /* Roundness of the scroll thumb */
+    border: transparent; /* Creates padding around scroll thumb */
 }

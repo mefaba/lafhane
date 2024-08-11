@@ -9,8 +9,8 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.lafhane</groupId>
-	<artifactId>lafhane-server-java</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>LafhaneServer</artifactId>
+	<version>1.0.0-VESAIRE</version>
 	<name>lafhane-server-java</name>
 	<description>Java Server for Lafhane</description>
 	<properties>

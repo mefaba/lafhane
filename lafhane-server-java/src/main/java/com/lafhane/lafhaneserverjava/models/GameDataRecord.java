@@ -17,7 +17,7 @@ import java.util.List;
  * including scores, answers, and identifiers for the player and game.
  */
 @Document(collection = "gamedatas")
-public class GameData {
+public class GameDataRecord {
     @Id
     private String id;
     private ObjectId puzzleId;
@@ -29,7 +29,7 @@ public class GameData {
     @Transient
     private List<PlayerScorePair> playerScoresTotal;
 
-    public GameData(String id) {
+    public GameDataRecord(String id) {
         this.id = id;
         this.playerScoresGame = new ArrayList<PlayerScorePair>();
         this.playerScoresTotal = new ArrayList<PlayerScorePair>();

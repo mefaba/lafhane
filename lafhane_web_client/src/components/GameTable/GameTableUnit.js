@@ -1,93 +1,29 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import "./GameTable.scss";
 import {ReactComponent as SvgButton} from "../../assets/arrow-right-circle.svg";
 import {CSSTransition} from "react-transition-group";
 import {api_get_game_data, api_post_send_answer} from "../../api/api_calls.js";
+import { GameContext } from "../../context/GameContext.js";
 
-const gameData = {
-    puzzle: "irpnnsiletbfooie",
-    player: "test1",
-    playerCorrectAnswers: {
-        "sif": 3,
-        "bit": 3,
-        "cem": 3,
-        "ekme": 3,
-        "sitem": 3,
-        "ecet": 3,
-        "sabite": 3,
-        "isabet": 3,
-    },
-    playerGameScore: 5,
-    highScoresGame: {test1: 10, test2: 20, test3: 30},
-    highScoresTotal: {test1: 100, test2: 200, test3: 300},
-};
 const GameTableUnit = () => {
     //TODO mockpuzzleLetters and mockdata_validAnswers should be fetched from server
     //const mockpuzzleLetters = "irpnnsiletbfooie";
-
-    const mockdata_validAnswers = [
-        "sit",
-        "bek",
-        "cet",
-        "asi",
-        "bet",
-        "met",
-        "dem",
-        "kem",
-        "ece",
-        "tek",
-        "eti",
-        "ket",
-        "tem",
-        "fit",
-        "bas",
-        "sif",
-        "bit",
-        "cem",
-        "ekme",
-        "beis",
-        "emek",
-        "deme",
-        "süet",
-        "düet",
-        "sabi",
-        "site",
-        "kete",
-        "keme",
-        "asit",
-        "beti",
-        "abis",
-        "emet",
-        "etek",
-        "sübek",
-        "tebaa",
-        "emcek",
-        "demek",
-        "metis",
-        "basit",
-        "sümek",
-        "demet",
-        "bitek",
-        "sabit",
-        "tekme",
-        "abece",
-        "sitem",
-        "ecet",
-        "sabite",
-        "isabet",
-    ];
     const [score, setScore] = useState(0);
     const [currentAnswer, setCurrentAnswer] = useState("");
     const [puzzleLetters, setPuzzleLetters] = useState("");
     const [validAnswers, setValidAnswers] = useState([]);
+    const{setScoresTotal, setScoresGame}= useContext(GameContext);
 
     useEffect(() => {
         const fetchGameData = async () => {
             try {
                 const response = await api_get_game_data();
-                console.log("🚀 ~ fetchGameData ~ response:", response)
-                const {puzzleLetters} = response.data;
-                setPuzzleLetters(puzzleLetters);
+                console.log("🚀 ~ GameTableUnit ~ response:", response)
+                const {data} = response;
+                setPuzzleLetters(data.puzzleLetters);
+                setValidAnswers(data.correctAnswers)
+                setScoresGame(data.playerScoresGame);
+                setScoresTotal(data.playerScoresTotal);
             } catch (error) {
                 console.error("Failed to fetch game data:", error);
             }
@@ -144,7 +80,7 @@ const GameTableUnit = () => {
                 classNames="game-container-"
             >
                 <div className="game_container_inner">
-                    {puzzleLetters.split("").map((char, index) => (
+                    {puzzleLetters.toUpperCase().split("").map((char, index) => (
                         <div key={index} className="game_chars" onClick={() => handleTouchPress(char)}>
                             <p>{char}</p>
                         </div>
@@ -165,9 +101,9 @@ const GameTableUnit = () => {
                 </div>
             </div>
 
-            <div>
-                {validAnswers.map((answer, index) => (
-                    <div key={index}>{answer}</div>
+            <div className="answer_list">
+                {validAnswers.slice().reverse().map((answer, index) => (
+                    <div key={index}>{answer} </div>
                 ))}
             </div>
         </div>

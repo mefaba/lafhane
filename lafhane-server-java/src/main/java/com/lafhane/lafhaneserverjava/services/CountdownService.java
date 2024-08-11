@@ -31,7 +31,7 @@ public class CountdownService {
     public void countdown() {
         if (gameInPlay) {
             gameTime--;
-            if (gameTime <= 0) {
+            if (gameTime < 0) {
                 gameInPlay = false;
                 lobbyTime = 60;
                 gameMaster.EndGame();
@@ -40,7 +40,7 @@ public class CountdownService {
             }
         } else {
             lobbyTime--;
-            if (lobbyTime <= 0) {
+            if (lobbyTime < 0) {
                 gameInPlay = true;
                 gameTime = 180;
                 gameMaster.StartGame();

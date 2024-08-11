@@ -16,10 +16,6 @@
     grid-template-rows: 50px 50px 50px 50px;
     column-gap: 10px;
     row-gap: 10px;
-    @media (max-width: 500px) {
-      grid-template-columns: 25px 25px 25px 25px;
-      grid-template-rows: 25px 25px 25px 25px;
-    }
     .game_lobby_chars {
       font-weight: 300;
       font-size: 32px;
@@ -49,10 +45,6 @@
     text-align: center;
     overflow: scroll;
     overflow-x: hidden;
-    @media screen and (max-width: 500px) {
-      width: 150px;
-      height: 330px;
-    }
   }
   .game_lobby_input_answer {
     margin: 5px 25px;

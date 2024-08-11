@@ -5,52 +5,36 @@ import {useContext} from "react";
 import {CSSTransition} from "react-transition-group";
 import { api_get_game_data } from "../../api/api_calls.js";
 
-const gameData = {
-    puzzle: "irpnnsiletbfooie",
-    player: "test1",
-    playerCorrectAnswers: {
-        "sif": 3,
-        "bit": 3,
-        "cem": 3,
-        "ekme": 3,
-        "sitem": 3,
-        "ecet": 3,
-        "sabite": 3,
-        "isabet": 3,
-    },
-    playerGameScore: 5,
-    highScoresGame: {test1: 10, test2: 20, test3: 30},
-    highScoresTotal: {test1: 100, test2: 200, test3: 300},
-};
+
 const GameTableUnitForLobby = () => {
     //TODO mockpuzzleLetters and mockdata_validAnswers should be fetched from server
     //const mockpuzzleLetters = "irpnnsiletbfooie";
     const [score] = useState(0);
     const [puzzleLetters, setPuzzleLetters] = useState("");
-    const {setRemainingTime} = useContext(GameContext);
- 
+    const{setScoresTotal, setScoresGame,setPuzzleAnswerList}= useContext(GameContext);
 
-    const getGameData = async () => {
-        await api_get_game_data()
-            .then((response) => {
-                const {puzzleLetters, remainingTime} = response.data;
-                console.log("🚀 ~ .GameTableUnit ~ remainingTime:", remainingTime)
-                setPuzzleLetters(puzzleLetters);
-                setRemainingTime(remainingTime);
-            })
-            .catch((error) => {
-                console.log("🚀 ~ getGameData ~ error", error);
-            });
-    };
 
     useEffect(() => {
-        getGameData();
-        // eslint-disable-next-line
+        const fetchGameData = async () => {
+            try {
+                const response = await api_get_game_data();
+                const {data} = response;
+                setPuzzleLetters(data.puzzleLetters);
+                setScoresGame(data.playerScoresGame);
+                setScoresTotal(data.playerScoresTotal);
+                setPuzzleAnswerList(data.puzzleAnswerList);
+            } catch (error) {
+                console.error("Failed to fetch game data:", error);
+            }
+        };
+
+        fetchGameData();
     }, []);
+
     return (
         <div className="game_lobby_container">
             <div className="button_container">
-                <div className="button1">SCORE {score}</div>
+                {/* <div className="button1">SCORE {score}</div> */}
             </div>
             <CSSTransition
                 in={true}
@@ -64,7 +48,7 @@ const GameTableUnitForLobby = () => {
                 classNames="game_lobby-container-"
             >
                 <div className="game_lobby_container_inner">
-                    {puzzleLetters.split("").map((char, index) => (
+                    {puzzleLetters.toUpperCase().split("").map((char, index) => (
                         <div key={index} className="game_lobby_chars">
                             <p>{char}</p>
                         </div>

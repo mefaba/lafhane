@@ -168,3 +168,29 @@
 }
 .game-container--exit-done {
 }
+
+
+.answer_list {
+  box-sizing: border-box;
+  padding: 10px;
+  box-shadow: 4px 3px 7px rgba(11, 0, 107, 0.4);
+  min-height: 30px;
+  width: 300px;
+  position: relative;
+  display: flex;
+  overflow-x: auto; /* Enables horizontal scrolling */
+  gap: 4px;
+}
+
+.answer_list::-webkit-scrollbar {
+  height: 4px; /* Minimal height for the scrollbar */
+}
+
+.answer_list::-webkit-scrollbar-thumb {
+  background-color: rgba(11, 0, 107, 0.4); /* Thumb color blending with the box shadow color */
+  border-radius: 10px;
+}
+
+.answer_list::-webkit-scrollbar-track {
+  background-color: transparent; /* Track blends with the background */
+}
