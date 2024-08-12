@@ -31,9 +31,6 @@ export const api_verify_token = () => {
 
 export const api_get_game_data = async () => {
     return axiosInstance.get(`${process.env.REACT_APP_ACTIVESERVER}/api/gamedata`, {
-        headers: {
-            "Access-Control-Allow-Origin": "*",
-        },
         withCredentials: true,
         validateStatus: function (status) {
             return status >= 200 && status < 300; // default, but added for clarity. Axios throws error if status is not between 200-299
@@ -48,9 +45,6 @@ export const api_post_send_answer = (answer) => {
             answer: answer,
         },
         {
-            headers: {
-                "Access-Control-Allow-Origin": "*",
-            },
             validateStatus: function (status) {
                 return status >= 200 && status < 300; // default, but added for clarity. Axios throws error if status is not between 200-299
             },
