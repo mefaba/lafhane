@@ -51,10 +51,11 @@ function GameIntroUnit() {
                         <p>Min length: 4, Max Length: 10</p>
                         <p>{message}</p>
                         <label htmlFor="username">Username: </label>
-                        
                         <input required minLength="4" type="text" id="username" onChange={(event) => setUsername(event.target.value)} />
-                        <label htmlFor="username">Password: </label>
+
+                        <label htmlFor="password">Password: </label>
                         <input required minLength="4" type="text" id="password" onChange={(event) => setPasword(event.target.value)} />
+
                         <button className="button-63" onClick={handleStart}>PLAY</button>
                         <p>OR</p>
                         <button onClick={() => setGameView(GameViews.registerView)} className="button-63">Register</button>
