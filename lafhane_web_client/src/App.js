@@ -37,7 +37,7 @@ function App() {
         console.error("WebSocket error:", error);
     }, []);
 
-    const [socket] = useWebSocket(`ws://${process.env.REACT_APP_ACTIVESERVER}/ws`, handleWebSocketMessage, handleWebSocketError);
+    const [socket] = useWebSocket(`wss://${process.env.REACT_APP_ACTIVESERVER}/ws`, handleWebSocketMessage, handleWebSocketError);
     
   
     
