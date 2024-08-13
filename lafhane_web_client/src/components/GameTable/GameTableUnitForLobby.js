@@ -33,9 +33,6 @@ const GameTableUnitForLobby = () => {
 
     return (
         <div className="game_lobby_container">
-            <div className="button_container">
-                {/* <div className="button1">SCORE {score}</div> */}
-            </div>
             <CSSTransition
                 in={true}
                 timeout={{

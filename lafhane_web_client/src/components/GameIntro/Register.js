@@ -52,11 +52,12 @@ function Register() {
                     <div className="main-intro">
                         <h2>Register</h2>
                         <p>Min length: 4, Max Length: 10</p>
-                        <p>{message}</p>
+                  
                         <label htmlFor="username">Username: </label>
                         <input required minLength="4" type="text" id="username" onChange={(event) => setUsername(event.target.value)} />
                         <label htmlFor="password">New Password: </label>
                         <input required minLength="4" type="text" id="password" onChange={(event) => setPasword(event.target.value)} />
+                        <p>{message}</p>
                         <button className="button-63" onClick={handleStart}>PLAY</button>
                         <p>OR</p>
                         <button onClick={() => setGameView(GameViews.loginView)} className="button-63">Login</button>
