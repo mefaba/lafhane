@@ -60,7 +60,7 @@ const GameTableUnit = () => {
         setCurrentAnswer(e.target.value);
     };
     const handleTouchPress = (recieved_char) => {
-        setCurrentAnswer(currentAnswer + recieved_char);
+        setCurrentAnswer(currentAnswer + recieved_char.toLowerCase());
     };
 
     return (
@@ -93,7 +93,8 @@ const GameTableUnit = () => {
                     type="text"
                     value={currentAnswer}
                     onChange={handleInputChange}
-                    onKeyPress={(event) => (event.charCode === 13 ? handleAnswerSubmit() : null)}
+                    onKeyDown={(event) => (event.key === "Enter" ? handleAnswerSubmit() : null)}
+                    onTouchStart={(e) => e.target.focus()}
                 />
 
                 <div className="btn" onClick={handleAnswerSubmit}>
