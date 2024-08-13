@@ -55,7 +55,7 @@ function Register() {
                         <p>{message}</p>
                         <label htmlFor="username">Username: </label>
                         <input required minLength="4" type="text" id="username" onChange={(event) => setUsername(event.target.value)} />
-                        <label htmlFor="username">New Password: </label>
+                        <label htmlFor="password">New Password: </label>
                         <input required minLength="4" type="text" id="password" onChange={(event) => setPasword(event.target.value)} />
                         <button className="button-63" onClick={handleStart}>PLAY</button>
                         <p>OR</p>

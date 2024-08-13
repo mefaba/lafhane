@@ -3,7 +3,7 @@ import "./GameTable.scss";
 import {ReactComponent as SvgButton} from "../../assets/arrow-right-circle.svg";
 import {CSSTransition} from "react-transition-group";
 import {api_get_game_data, api_post_send_answer} from "../../api/api_calls.js";
-import { GameContext } from "../../context/GameContext.js";
+import {GameContext} from "../../context/GameContext.js";
 
 const GameTableUnit = () => {
     //TODO mockpuzzleLetters and mockdata_validAnswers should be fetched from server
@@ -12,16 +12,16 @@ const GameTableUnit = () => {
     const [currentAnswer, setCurrentAnswer] = useState("");
     const [puzzleLetters, setPuzzleLetters] = useState("");
     const [validAnswers, setValidAnswers] = useState([]);
-    const{setScoresTotal, setScoresGame}= useContext(GameContext);
+    const {setScoresTotal, setScoresGame} = useContext(GameContext);
 
     useEffect(() => {
         const fetchGameData = async () => {
             try {
                 const response = await api_get_game_data();
-                console.log("🚀 ~ GameTableUnit ~ response:", response)
+                console.log("🚀 ~ GameTableUnit ~ response:", response);
                 const {data} = response;
                 setPuzzleLetters(data.puzzleLetters);
-                setValidAnswers(data.correctAnswers)
+                setValidAnswers(data.correctAnswers);
                 setScoresGame(data.playerScoresGame);
                 setScoresTotal(data.playerScoresTotal);
             } catch (error) {
@@ -36,7 +36,7 @@ const GameTableUnit = () => {
         //dont send duplicate answer
         if (validAnswers.includes(currentAnswer)) {
             console.log("Duplicate Answer");
-            return
+            return;
         }
         api_post_send_answer(currentAnswer)
             .then((response) => {
@@ -47,7 +47,7 @@ const GameTableUnit = () => {
                 }
             })
             .catch((error) => {
-                console.log("🚀 ~ sendAnswer ~ error:", error)
+                console.log("🚀 ~ sendAnswer ~ error:", error);
             });
     };
 
@@ -80,11 +80,20 @@ const GameTableUnit = () => {
                 classNames="game-container-"
             >
                 <div className="game_container_inner">
-                    {puzzleLetters.toUpperCase().split("").map((char, index) => (
-                        <div key={index} className="game_chars" onClick={() => handleTouchPress(char)}>
-                            <p>{char}</p>
-                        </div>
-                    ))}
+                    {puzzleLetters
+                        .toUpperCase().split("")
+                        .map((char, index) => (
+                            <div
+                                key={index}
+                                className="game_chars"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    handleTouchPress(char);
+                                }}
+                            >
+                                <p>{char}</p>
+                            </div>
+                        ))}
                 </div>
             </CSSTransition>
 
@@ -103,9 +112,12 @@ const GameTableUnit = () => {
             </div>
 
             <div className="answer_list">
-                {validAnswers.slice().reverse().map((answer, index) => (
-                    <div key={index}>{answer} </div>
-                ))}
+                {validAnswers
+                    .slice()
+                    .reverse()
+                    .map((answer, index) => (
+                        <div key={index}>{answer} </div>
+                    ))}
             </div>
         </div>
     );
