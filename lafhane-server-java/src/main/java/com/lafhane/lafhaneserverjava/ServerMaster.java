@@ -7,6 +7,8 @@ import com.lafhane.lafhaneserverjava.security.JwtService;
 import com.lafhane.lafhaneserverjava.services.CountdownService;
 import com.lafhane.lafhaneserverjava.services.PlayerService;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,8 @@ import java.util.Map;
 
 @RestController
 public class ServerMaster {
+    private static final Logger logger = LoggerFactory.getLogger(CountdownService.class);
+
     @Autowired
     private CountdownService countdownService;
     private AuthenticationManager authenticationManager;
@@ -85,6 +89,7 @@ public class ServerMaster {
 
     @GetMapping("/")
     public String getServer(){
+        logger.info("Health check: Server is up and running! 200 OK");
         return "Server is up and running!";
     }
 

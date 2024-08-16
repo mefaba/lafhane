@@ -68,12 +68,11 @@ export const api_login =  (username, password) => {
             }
         )
         .then((res) => {
-            console.log("🚀 ~ .then ~ res:", res)
             setAuthToken(res.data["jwt-token"]);
             return res;
         })
         .catch((error) => {
-            console.log("Error:", error)
+            console.log("Error - api_login:", error)
             setAuthToken(null);
         });
 };
@@ -94,12 +93,11 @@ export const api_register =  (username, password) => {
             }
         )
         .then((res) => {
-            console.log("🚀 ~ .then ~ res:", res)
             setAuthToken(res.data["jwt-token"]);
             return res;
         })
         .catch((error) => {
-            console.log("Error:", error)
+            console.log("Error - api_register:", error)
             setAuthToken(null);
             throw error;
         });
@@ -126,7 +124,6 @@ const getAuthToken = () => {
 
 export const removeAuthToken = () => {
     cookies.remove("jwt-token", {path:"/"});
-    console.log("removed token");
 }
 
 

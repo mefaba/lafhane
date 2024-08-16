@@ -18,14 +18,13 @@ const GameTableUnit = () => {
         const fetchGameData = async () => {
             try {
                 const response = await api_get_game_data();
-                console.log("🚀 ~ GameTableUnit ~ response:", response);
                 const {data} = response;
                 setPuzzleLetters(data.puzzleLetters);
                 setValidAnswers(data.correctAnswers);
                 setScoresGame(data.playerScoresGame);
                 setScoresTotal(data.playerScoresTotal);
             } catch (error) {
-                console.error("Failed to fetch game data:", error);
+                console.error("Failed to fetchGameData()", error);
             }
         };
 

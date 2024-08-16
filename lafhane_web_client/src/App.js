@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { api_verify_token } from "./api/api_calls";
 import "./App.scss";
 import LottieLoading from "./components/GameIntro/LottieLoading";
@@ -15,9 +15,7 @@ function App() {
         setLoading(true);
         api_verify_token()
             .then((response) => {
-                console.log("🚀 ~ .api_verify_token ~ response:", response);
                 const {isVerified} = response.data;
-                console.log("🚀 ~ .then ~ isVerified:", isVerified);
                 if (isVerified) {
                     setIsconnected(true);
                 }
@@ -31,26 +29,25 @@ function App() {
     }, []);
 
     if (loading) {
-        console.log("here");
         return (
             <div className="App">
                 <div className="gameintro_container">
                     <div className="main-intro">
                         <LottieLoading />
                     </div>
-                </div>{" "}
+                </div>
             </div>
         );
     }
 
     return (
-        <Router>
+        <MemoryRouter>
             <Routes>
-                <Route path="game" element={<GamePage />} />
-                <Route path="home" element={<HomePage />} />
+                <Route path="/game" element={<GamePage />} />
+                <Route path="/home" element={<HomePage />} />
                 <Route path="*" element={<HomePage />} />
             </Routes>
-        </Router>
+        </MemoryRouter>
     );
 }
 

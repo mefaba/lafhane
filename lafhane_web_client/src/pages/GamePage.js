@@ -39,7 +39,6 @@ export const GamePage = () => {
     const [socket] = useWebSocket(process.env.REACT_APP_WEBSOCKET, handleWebSocketMessage, handleWebSocketError);
 
     const Logout = () => {
-        console.log("🚀 ~ Logout ~ Logout:", Logout);
         removeAuthToken();
         setIsconnected(false);
         navigate("/home");
