@@ -1,11 +1,11 @@
 .game_lobby_container {
-  padding: 10px;
+  padding: 5px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
   //height: 100vh;
-  height: 350px;
+  height: 300px;
   width: 100vw;
   .game_lobby_container_inner {
     padding: 10px;

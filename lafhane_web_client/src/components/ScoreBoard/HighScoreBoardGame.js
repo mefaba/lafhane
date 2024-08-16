@@ -1,22 +1,9 @@
 import React, {useContext, useState}  from 'react';
 import "./ScoreBoard.scss";
-import { GameContext } from '../../context/GameContext';
+import useGameStore from '../../context/GameContext';
 
-const mock_gamescores = [
-    { "Alice": 50 },
-    { "Bob": 20 },
-    { "Charlie": 10 },
-    { "David": 10 },
-    { "Eve": 9 },
-    { "Frank": 5 },
-    { "Grace": 8 },
-    { "Hank": 7 },
-    { "Ivy": 7 },
-    { "Jack": 6 }
-  ];
 const HighScoreBoardGame = () => {
-    const [gamescores, setGamescores] = useState(mock_gamescores);
-    const {scoresGame}= useContext(GameContext); 
+    const {scoresGame}= useGameStore(); 
   
   return (
     <div id='gamescore_board'>

@@ -2,11 +2,11 @@ import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useContext } from "react";
-import { GameContext } from "../../context/GameContext";
+import useGameStore from "../../context/GameContext";
 import "./CountDown.scss";
 
 const CountDownUnit = () => {
-  const { remainingTime } = useContext(GameContext);
+  const { remainingTime } = useGameStore();
  
   const [ localRemainingTime, setLocalRemainingTime] = useState(0);
   const minutes = Math.floor(localRemainingTime / 60) || 0;

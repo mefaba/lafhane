@@ -1,7 +1,7 @@
-export const GameViews = {
-    playView: "playView",
-    loginView: "loginView",
-    registerView: "registerView",
-    lobbyView: "lobbyView",
-    errorView: "errorView",
-};
+export const GAMEVIEW = Object.freeze({
+    play: "play",
+    lobby: "lobby",
+    login: "login",
+    register: "register",
+    error: "error",
+});

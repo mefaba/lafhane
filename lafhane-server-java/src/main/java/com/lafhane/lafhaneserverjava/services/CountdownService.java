@@ -23,47 +23,48 @@ public class CountdownService {
     @Autowired
     private GameMaster gameMaster;
 
-    private int gameTime = 180;  // 3 minutes for game
+    private static final int GAME_DURATION = 180;  // 3 minutes for game
+    private static final int LOBBY_DURATION = 60;  // 1 minute for lobby
+
+    private int gameTime = GAME_DURATION;  // 3 minutes for game
     private int lobbyTime = 0;  // 1 minute for lobby
     private boolean gameInPlay = false;
 
     @Scheduled(fixedRate = 1000)
-    public void countdown() {
+    public synchronized  void countdown() {
         if (gameInPlay) {
             gameTime--;
-            if (gameTime < 0) {
-                gameInPlay = false;
-                lobbyTime = 60;
-                gameMaster.EndGame();
-                gameMaster.StartLobby();
-                logger.info("Game in Lobby");
+            if (gameTime <= 0) {
+                switchToLobby();
             }
         } else {
             lobbyTime--;
-            if (lobbyTime < 0) {
-                gameInPlay = true;
-                gameTime = 180;
-                gameMaster.StartGame();
-                logger.info("Game in Play");
+            if (lobbyTime <= 0) {
+                switchToGame();
             }
         }
         gameMaster.countdownServiceTimeSync(this.getRemainingTime());
-        // Update clients with the current countdown state
-    }
-
-
-    //@Scheduled(fixedDelay = 10 * 1000)
-    public void scheduleDeliverDataTask() {
-        try {
-
-        } catch (JSONException e) {
-            // Log the error or handle it appropriately
-            logger.error("Error creating JSON message", e);
-        }
     }
 
     public int getRemainingTime(){
         return gameInPlay ? gameTime : lobbyTime;
+    }
+
+    private void switchToLobby() {
+        logger.info("switchToLobby");
+        gameInPlay = false;
+        lobbyTime = LOBBY_DURATION;
+        gameMaster.EndGame();
+        gameMaster.StartLobby();
+
+    }
+
+    private void switchToGame() {
+        logger.info("switchToGame");
+        gameInPlay = true;
+        gameTime = GAME_DURATION;
+        gameMaster.StartGame();
+
     }
 }
 

@@ -29,10 +29,14 @@ ENTRYPOINT ["java", "-jar", "/app/LafhaneServerApp.jar"]
 #To push a new tag to this repository:
 #docker push <existing-image>:tagname
 
+#run container using the image
 #sudo docker run -d -p 80:8080 <existing-image>
+#sudo docker run -d --name lafhaneserver-app <existing-image>
 
 #delete stopped containers
 #sudo docker container prune
 
 #see container logs
 #sudo docker logs -f <container-name>
+
+#docker run -d -p 80:80 -p 443:443 --name nginx-ssl --link lafhaneserver-app:lafhaneserver-app nginx-ssl

@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import "./GameTableForLobby.scss";
-import {GameContext} from "../../context/GameContext.js";
+import useGameStore from "../../context/GameContext.js";
 import {useContext} from "react";
 import {CSSTransition} from "react-transition-group";
 import { api_get_game_data } from "../../api/api_calls.js";
@@ -11,7 +11,7 @@ const GameTableUnitForLobby = () => {
     //const mockpuzzleLetters = "irpnnsiletbfooie";
     const [score] = useState(0);
     const [puzzleLetters, setPuzzleLetters] = useState("");
-    const{setScoresTotal, setScoresGame,setPuzzleAnswerList}= useContext(GameContext);
+    const{setScoresTotal, setScoresGame,setPuzzleAnswerList}= useGameStore();
 
 
     useEffect(() => {

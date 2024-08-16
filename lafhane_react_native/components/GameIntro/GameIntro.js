@@ -27,7 +27,7 @@ const GameIntro = (props) => {
         }
         /* setIsStarted(true) */
       })
-      .catch((err) => console.log("sendUsernameToAPI", err));
+      .catch((err) => console.log("f", err));
   };
 
   const handleStart = () => {

@@ -31,7 +31,7 @@ public class PuzzleService {
 
     // Methods
     public Puzzle queryPuzzle() {
-        logger.info("Querying total number of puzzles in database: {}", puzzleCount);
+        logger.info("Querying puzzle: {}", this.puzzleIndex);
         if(puzzleIndex >= puzzleCount){
             this.puzzleIndex = 0;
         }

@@ -3,7 +3,7 @@ import "./GameTable.scss";
 import {ReactComponent as SvgButton} from "../../assets/arrow-right-circle.svg";
 import {CSSTransition} from "react-transition-group";
 import {api_get_game_data, api_post_send_answer} from "../../api/api_calls.js";
-import {GameContext} from "../../context/GameContext.js";
+import useGameStore  from "../../context/GameContext.js";
 
 const GameTableUnit = () => {
     //TODO mockpuzzleLetters and mockdata_validAnswers should be fetched from server
@@ -12,7 +12,7 @@ const GameTableUnit = () => {
     const [currentAnswer, setCurrentAnswer] = useState("");
     const [puzzleLetters, setPuzzleLetters] = useState("");
     const [validAnswers, setValidAnswers] = useState([]);
-    const {setScoresTotal, setScoresGame} = useContext(GameContext);
+    const {setScoresTotal, setScoresGame} = useGameStore();
 
     useEffect(() => {
         const fetchGameData = async () => {

@@ -25,7 +25,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(new WebSocketHandler(), "/ws").setAllowedOrigins("http://localhost:3000");
+        registry.addHandler(new WebSocketHandler(), "/ws").setAllowedOrigins("https://lafhane.netlify.app","http://localhost:3000");
         //registry.addHandler(new WebSocketHandler2(), "/ws/remaining_time").setAllowedOrigins("*");
     }
 

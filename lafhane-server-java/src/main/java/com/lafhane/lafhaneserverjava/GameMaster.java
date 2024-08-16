@@ -56,15 +56,6 @@ public class GameMaster {
         this.playerScoresTotal = new ArrayList<>();
     }
 
-    public Player getPlayer(String username) {
-        for (Player player : playerList) {
-            if (player.getUsername().contains(username)) {
-                return player;
-            }
-        }
-        return null;
-    }
-    // METHODS
 
 
     public boolean handleAnswer(String answer) {
@@ -94,18 +85,19 @@ public class GameMaster {
         return liveData;
     }
 
-    //This function called every second by countdown service
+
+    /**
+     * This function is called every second by the countdown service. It updates the remaining time for the game,
+     * creates a {@link GameDataDTOWebSocket} object with the updated time and game state, and broadcasts this data to all players.
+     *
+     * @param remainingTime The remaining time for the game in seconds.
+     */
     public void countdownServiceTimeSync(int remainingTime){
         this.setRemainingTime(remainingTime);
-    }
 
-    @Scheduled(fixedRate = 1 * 1000)
-    public void deliverGameDataToPlayers(){
-        //create game data message
         GameDataDTOWebSocket gameDataDTOWebSocket = new GameDataDTOWebSocket(
-                this.getRemainingTime(),
-                this.getGameState(),
-                this.getGameID()
+                remainingTime,
+                this.getGameState()
         );
         //broadcast game data message to every player
         webSocketHandler.broadcastMessage(gameDataDTOWebSocket);
@@ -113,52 +105,27 @@ public class GameMaster {
 
 
     public void StartGame() {
+        logger.info("Start Game");
         /*Initialize new game variables*/
         this.setGameState(GAMESTATE.IN_PLAY);
         this.puzzle = puzzleService.queryPuzzle();
         this.gameID = new ObjectId().toString();
         this.gameDataRecord = new GameDataRecord(this.getGameID());
 
-        //create game data message
-        GameDataDTOWebSocket gameDataDTOWebSocket = new GameDataDTOWebSocket(
-                this.getRemainingTime(),
-                this.getGameState(),
-                this.getGameID()
-        );
-        //broadcast game data message to every player
-        webSocketHandler.broadcastMessage(gameDataDTOWebSocket);
-
-        // TODO implement here
-        for (Player player : playerList) {
-
-        }
-        //Start CountDown
-
     }
 
     public void EndGame() {
-        //savePlayerGames
+        logger.info("End Game");
         scoreService.saveScores(gameID);
-
-        //clean up
         scoreService.cleanAllLiveData();
     }
 
     public void StartLobby() {
+        logger.info("Start Lobby");
         this.setGameState(GAMESTATE.IN_LOBBY);
-        //create game data message to boarcast
-        GameDataDTOWebSocket gameDataDTOWebSocket = new GameDataDTOWebSocket(
-                this.getRemainingTime(),
-                this.getGameState(),
-                this.getGameID()
-        );
         setPlayerScoresGame(scoreService.getTopPlayersInGame(this.getGameID()));
-
         setPlayerScoresTotal(scoreService.getTopPlayersInTotal());
-        //create game data for rest api endpoint that will be used for getting game scores
 
-        //broadcast game data message to every player
-        webSocketHandler.broadcastMessage(gameDataDTOWebSocket);
     }
 
     public void GetUserScore(String playerName, int score) {

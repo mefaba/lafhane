@@ -1,9 +1,9 @@
 import React, {useContext} from "react";
 import "./CorrectAnswersUnit.scss";
-import { GameContext } from "../../context/GameContext";
+import useGameStore from "../../context/GameContext";
 
 const CorrectAnswersUnit = () => {
-    const {puzzleAnswerList} = useContext(GameContext);
+    const {puzzleAnswerList} = useGameStore();
     return (
         <div id="correct-answers-unit">
             <div className="answers-grid">

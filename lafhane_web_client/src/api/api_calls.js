@@ -112,8 +112,8 @@ export const api_get_livedata = () => {
 
 
 const setAuthToken = (token) => {
-    if (token !== null) {
-        cookies.set("jwt-token", token);
+    if (token) {
+        cookies.set("jwt-token", token,{path:"/"});
     } else {
         cookies.remove("jwt-token");
     }
@@ -125,7 +125,8 @@ const getAuthToken = () => {
 }
 
 export const removeAuthToken = () => {
-    cookies.remove("jwt-token");
+    cookies.remove("jwt-token", {path:"/"});
+    console.log("removed token");
 }
 
 

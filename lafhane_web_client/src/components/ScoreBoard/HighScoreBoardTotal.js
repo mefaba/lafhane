@@ -1,6 +1,6 @@
 import React, {useState, useContext} from "react";
 import "./ScoreBoard.scss";
-import { GameContext } from "../../context/GameContext";
+import useGameStore from "../../context/GameContext";
 
 const mock_highscores = [
   {"playerName": "Alice", "score": 150},
@@ -16,7 +16,7 @@ const mock_highscores = [
 ]
 const HighScoreBoardTotal = () => {
     //const [highscores, setHighscores] = useState(mock_highscores);
-    const {scoresTotal}= useContext(GameContext); 
+    const {scoresTotal}= useGameStore(); 
     return (
         <div id="highscore_board">
             <div className="leaderboard">

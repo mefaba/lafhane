@@ -28,6 +28,10 @@ frontend when wrong password entered fix style issue that inputs width increases
 backennd if gameState IN_LOBBY dont accept answers in server side. return immediately from handleAnswer function
 frontend how to play section
 front end player correct answers section
-deploy
+(done)deploy
 frontend update the register and login buttons
 backend 100 puzzles should be.
+frontend havai after user sends a correct answer
+frontend known words should be visible to user during lobby
+fix erdem's problem
+fix murat;s problem

@@ -1,43 +1,25 @@
-import React, {useState} from "react";
-import {GameViews} from "../constants/game";
-/* import axios from "axios"; */
+import { create } from 'zustand';
+import { GAMEVIEW } from "../constants/game";
 
-export const GameContext = React.createContext();
+const useGameStore = create((set) => ({
+  puzzleLetters: [],
+  puzzleAnswerList: [],
+  gameView: undefined,
+  remainingTime: 0,
+  username: "",
+  scoresGame: [],
+  scoresTotal: [],
+  isconnected: false,
 
-const GameProvider = (props) => {
-    const [puzzleLetters, setPuzzleLetters] = useState([]); //["M", "O", "T", "H", "E", "R"
-    const [puzzleAnswerList, setPuzzleAnswerList] = useState([]);
-    const [gameView, setGameView] = useState(GameViews.loginView); //gameViews.loginView, gameViews.playView, gameViews.scoreView, gameViews.errorView
-    const [remainingTime, setRemainingTime] = useState(0);
-    const [currentStage, setCurrentStage] = useState("gameStage"); //gameStage & resultStage
-    const [username, setUsername] = useState("");
-    const [scoresGame, setScoresGame] = useState([]);
-    const [scoresTotal, setScoresTotal] = useState([]);
+  setPuzzleLetters: (letters) => set({ puzzleLetters: letters }),
+  setPuzzleAnswerList: (answers) => set({ puzzleAnswerList: answers }),
+  setGameView: (view) => set({ gameView: view }),
+  setRemainingTime: (time) => set({ remainingTime: time }),
+  setUsername: (name) => set({ username: name }),
+  setScoresGame: (scores) => set({ scoresGame: scores }),
+  setScoresTotal: (scores) => set({ scoresTotal: scores }),
+  setIsconnected: (connected) => set({ isconnected: connected }),
+}));
 
-    return (
-        <GameContext.Provider
-            value={{
-                currentStage,
-                setCurrentStage,
-                username,
-                setUsername,
-                gameView,
-                setGameView,
-                remainingTime,
-                setRemainingTime,
-                puzzleLetters,
-                setPuzzleLetters,
-                puzzleAnswerList,
-                setPuzzleAnswerList,
-                scoresGame,
-                setScoresGame,
-                scoresTotal,
-                setScoresTotal,
-            }}
-        >
-            {props.children}
-        </GameContext.Provider>
-    );
-};
 
-export default GameProvider;
+export default useGameStore;
