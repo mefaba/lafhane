@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { MemoryRouter, Route, Routes } from "react-router-dom";
+import { MemoryRouter, Navigate, Route, Routes } from "react-router-dom";
 import { api_verify_token } from "./api/api_calls";
 import "./App.scss";
 import LottieLoading from "./components/GameIntro/LottieLoading";
@@ -45,7 +45,8 @@ function App() {
             <Routes>
                 <Route path="/game" element={<GamePage />} />
                 <Route path="/home" element={<HomePage />} />
-                <Route path="*" element={<HomePage />} />
+                {isconnected &&   <Route path="*" element={<Navigate to="/game" />} />}
+                <Route path="*" element={<Navigate to="/home" />} />
             </Routes>
         </MemoryRouter>
     );
