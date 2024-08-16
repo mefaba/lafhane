@@ -7,6 +7,11 @@ import GameProvider from "./context/GameContext";
 import {Router} from "./context/RouterContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
+
+/* if (process.env.NODE_ENV === 'production') {
+    console.log = () => {};
+} */
+
 root.render(
     <React.StrictMode>
                 <App />
