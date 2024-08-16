@@ -33,7 +33,8 @@ export const GamePage = () => {
 
     const handleWebSocketError = useCallback((error) => {
         console.error("WebSocket error:", error);
-        //setLoading(false);
+        setLoading(false);
+        navigate("/home");
     }, []);
 
     const [socket] = useWebSocket(process.env.REACT_APP_WEBSOCKET, handleWebSocketMessage, handleWebSocketError);
