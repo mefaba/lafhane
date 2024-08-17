@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -79,13 +80,16 @@ public class ScoreService {
 
             List<PlayerScorePair> result = new ArrayList<>();
             for (Document doc : topPlayers) {
-                String playerId = doc.getObjectId("_id").toString();
-                String playerName = PlayerService.getPlayerNameById(playerRepository,playerId);
-                int score = doc.getInteger("score");
-                // TODO: Implement player name lookup
-                result.add(new PlayerScorePair(playerName, score));
+                try{
+                    String playerId = doc.getObjectId("_id").toString();
+                    String playerName = PlayerService.getPlayerNameById(playerRepository,playerId);
+                    int score = doc.getInteger("score");
+                    result.add(new PlayerScorePair(playerName, score));
+                }catch (UsernameNotFoundException e){
+                    // Handle the case where the player's name could not be found
+                    logger.warn("TopPlayersInTotal skipping a player reason: {}", e.getMessage());
+                }
             }
-
             return result;
         } catch (Exception e) {
             // Log the exception

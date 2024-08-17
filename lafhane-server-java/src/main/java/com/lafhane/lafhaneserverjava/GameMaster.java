@@ -106,6 +106,8 @@ public class GameMaster {
 
     public void StartGame() {
         logger.info("Start Game");
+
+
         /*Initialize new game variables*/
         this.setGameState(GAMESTATE.IN_PLAY);
         this.puzzle = puzzleService.queryPuzzle();

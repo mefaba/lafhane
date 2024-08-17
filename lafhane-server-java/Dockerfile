@@ -11,7 +11,7 @@ FROM amazoncorretto:17
 WORKDIR /app
 
 # Copy the jar file from your local machine to the container
-COPY --from=build /app/target/LafhaneServer-1.0.0-VESAIRE.jar /app/LafhaneServerApp.jar
+COPY --from=build /app/target/LafhaneServer-1.1.2-VESAIRE.jar /app/LafhaneServerApp.jar
 
 # Expose the port your Spring Boot application is running on
 EXPOSE 8080

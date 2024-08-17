@@ -20,7 +20,7 @@ function Register() {
     const handleStart = () => {
         if (username.length > 3 && username.length < 11) {
             //check if username exists in database.
-            api_register(username, password).then((response) => {
+            api_register(username.toLowerCase(), password).then((response) => {
                     if (response) {
                         // Delay the view change to playView by 1 second if login is successful
                         setTimeout(() => navigate("/game"), 1000);
