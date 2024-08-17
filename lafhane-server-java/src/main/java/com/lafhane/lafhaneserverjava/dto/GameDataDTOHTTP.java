@@ -1,10 +1,7 @@
 package com.lafhane.lafhaneserverjava.dto;
 
 import com.google.gson.Gson;
-import com.lafhane.lafhaneserverjava.models.Puzzle;
 import com.lafhane.lafhaneserverjava.types.PlayerScorePair;
-
-import java.io.Serializable;
 import java.util.List;
 
 

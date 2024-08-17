@@ -29,9 +29,12 @@ backennd if gameState IN_LOBBY dont accept answers in server side. return immedi
 frontend how to play section
 front end player correct answers section
 (done)deploy
-frontend update the register and login buttons
 backend 100 puzzles should be.
 frontend havai after user sends a correct answer
 frontend known words should be visible to user during lobby
-fix erdem's problem
-fix murat;s problem
+fix murats problem
+frontend kucuk buyuk harf problemi
+backend kucuk buyuk harf problemi
+frontend online players icon and count
+backend vpn solve 
+frontend issue murats big problem non existing word accepted.

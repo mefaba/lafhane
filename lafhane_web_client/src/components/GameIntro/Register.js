@@ -1,6 +1,6 @@
 import React from "react";
 import {useContext} from "react";
-import useGameStore from "../../context/GameContext";
+import { useGameStore } from "../../context/GameContext";
 import {useState} from "react";
 
 import "./GameIntro.scss";
@@ -8,7 +8,7 @@ import LottieLoading from "./LottieLoading.js";
 import {GAMEVIEW} from "../../constants/game.js";
 import {api_register} from "../../api/api_calls.js";
 import { useNavigate } from "react-router-dom";
-
+import icon from "../../assets/icon.png"
 
 function Register() {
     const navigate = useNavigate();
@@ -50,17 +50,17 @@ function Register() {
             ) : (
                 <>
                     <div className="main-intro">
-                        <h2>Register</h2>
-                        <p>Min length: 4, Max Length: 10</p>
-                  
+                        <img src={icon} alt="Lafhane Logo"  />
+                        <p>Your username should be between 4 and 10 characters long.</p>
                         <label htmlFor="username">Username: </label>
                         <input required minLength="4" type="text" id="username" onChange={(event) => setUsername(event.target.value)} />
                         <label htmlFor="password">New Password: </label>
                         <input required minLength="4" type="text" id="password" onChange={(event) => setPasword(event.target.value)} />
                         <p>{message}</p>
-                        <button className="button-63" onClick={handleStart}>PLAY</button>
-                        <p>OR</p>
-                        <button onClick={() => setGameView(GAMEVIEW.login)} className="button-63">Login</button>
+                        <button className="button-63" onClick={handleStart}>Register</button>
+                        <div style={{ borderTop: "1px solid #ccc", margin: "10px 0" }}></div>
+                        {/* <p style={{ fontSize: "24px" }}>Already have an account?</p> */}
+                        <button onClick={() => setGameView(GAMEVIEW.login)} className="button-63">BACK</button>
                     </div>
                 </>
             )}

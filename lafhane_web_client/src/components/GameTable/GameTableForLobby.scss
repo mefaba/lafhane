@@ -1,11 +1,9 @@
 .game_lobby_container {
-  padding: 5px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   //height: 100vh;
-  height: 300px;
   width: 100vw;
   .game_lobby_container_inner {
     padding: 10px;
@@ -33,7 +31,9 @@
       transition-property: background-color;
     }
   }
-  .game_lobby_correct_answers {
+
+
+/*   .game_lobby_correct_answers {
     display: block;
     position: absolute;
     height: 430px;
@@ -45,7 +45,9 @@
     text-align: center;
     overflow: scroll;
     overflow-x: hidden;
-  }
+  } */
+
+
   .game_lobby_input_answer {
     margin: 5px 25px;
     display: flex;
@@ -90,26 +92,6 @@
   margin: 5px 25px 0px 25px;
   width: 300px;
   user-select: none;
-  .button1 {
-    display: inline-block;
-    padding: 0.35em 1.2em;
-    border: 0.1em solid #ffffff;
-    margin: 0 0.3em 0.3em 0;
-    border-radius: 0.12em;
-    box-sizing: border-box;
-    text-decoration: none;
-    font-family: "Roboto", sans-serif;
-    font-weight: 300;
-    color: #ffffff;
-    text-align: center;
-    transition: all 0.2s;
-    cursor: pointer;
-
-    &:hover {
-      color: #000000;
-      background-color: #ffffff;
-    }
-  }
 
   .button2 {
     display: inline-block;

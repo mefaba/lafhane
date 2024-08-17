@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { GAMEVIEW } from "../constants/game";
 
-const useGameStore = create((set) => ({
+export const useGameStore = create((set) => ({
   puzzleLetters: [],
   puzzleAnswerList: [],
   gameView: undefined,
@@ -21,5 +21,10 @@ const useGameStore = create((set) => ({
   setIsconnected: (connected) => set({ isconnected: connected }),
 }));
 
+export const useUIStore  = create((set) => ({
+    score: 0,
+    validAnswers: [],
 
-export default useGameStore;
+    setScore: (newScore) => set({ score: newScore }), 
+    setValidAnswers: (newValidAnswers) => set({ validAnswers: newValidAnswers})
+}));

@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import NavbarUnit from "../components/NavbarUnit";
 import Login from "../components/GameIntro/Login";
 import Register from "../components/GameIntro/Register";
-import useGameStore from "../context/GameContext";
+import { useGameStore } from "../context/GameContext";
 import { GAMEVIEW } from "../constants/game";
 
 

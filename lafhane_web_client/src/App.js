@@ -3,7 +3,7 @@ import { MemoryRouter, Navigate, Route, Routes } from "react-router-dom";
 import { api_verify_token } from "./api/api_calls";
 import "./App.scss";
 import LottieLoading from "./components/GameIntro/LottieLoading";
-import useGameStore from "./context/GameContext";
+import { useGameStore } from "./context/GameContext";
 import { GamePage } from "./pages/GamePage";
 import { HomePage } from "./pages/HomePage";
 

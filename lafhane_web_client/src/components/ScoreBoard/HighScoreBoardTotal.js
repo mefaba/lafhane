@@ -1,6 +1,6 @@
 import React, {useState, useContext} from "react";
 import "./ScoreBoard.scss";
-import useGameStore from "../../context/GameContext";
+import { useGameStore } from "../../context/GameContext";
 
 const mock_highscores = [
   {"playerName": "Alice", "score": 150},

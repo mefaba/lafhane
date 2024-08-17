@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import "./GameTableForLobby.scss";
-import useGameStore from "../../context/GameContext.js";
+import { useGameStore } from "../../context/GameContext.js";
 import {useContext} from "react";
 import {CSSTransition} from "react-transition-group";
 import { api_get_game_data } from "../../api/api_calls.js";
@@ -33,6 +33,7 @@ const GameTableUnitForLobby = () => {
 
     return (
         <div className="game_lobby_container">
+            <h2>Last Game Results</h2>
             <CSSTransition
                 in={true}
                 timeout={{

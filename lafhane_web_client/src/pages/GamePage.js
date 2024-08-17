@@ -10,12 +10,14 @@ import NavbarUnit from "../components/NavbarUnit";
 import HighScoreBoardGame from "../components/ScoreBoard/HighScoreBoardGame";
 import HighScoreBoardTotal from "../components/ScoreBoard/HighScoreBoardTotal";
 import { GAMEVIEW } from "../constants/game";
-import useGameStore from "../context/GameContext";
+import { useGameStore } from "../context/GameContext";
 import useWebSocket from "../utils/useWebSocket";
 
 export const GamePage = () => {
     const navigate = useNavigate();
-    const {isconnected, setIsconnected, setGameView, setRemainingTime,gameView} = useGameStore(); //development true, production false
+    const {isconnected, setIsconnected, setGameView, setRemainingTime} = useGameStore(); //development true, production false
+    const gameView = useGameStore((state) => state.gameView) //This detects changes with strict-equality (old === new) by default, this is efficient for atomic state picks.
+
 
     const [view, setview] = useState("game_board");
     const [loading, setLoading] = useState(true);

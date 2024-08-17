@@ -1,6 +1,6 @@
 import React, {useContext, useState}  from 'react';
 import "./ScoreBoard.scss";
-import useGameStore from '../../context/GameContext';
+import { useGameStore } from '../../context/GameContext';
 
 const HighScoreBoardGame = () => {
     const {scoresGame}= useGameStore(); 

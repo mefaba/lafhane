@@ -3,16 +3,16 @@ import "./GameTable.scss";
 import {ReactComponent as SvgButton} from "../../assets/arrow-right-circle.svg";
 import {CSSTransition} from "react-transition-group";
 import {api_get_game_data, api_post_send_answer} from "../../api/api_calls.js";
-import useGameStore  from "../../context/GameContext.js";
+import { useGameStore, useUIStore } from "../../context/GameContext.js";
+import LottieSuccess from "./LottieSuccess.js";
 
 const GameTableUnit = () => {
-    //TODO mockpuzzleLetters and mockdata_validAnswers should be fetched from server
-    //const mockpuzzleLetters = "irpnnsiletbfooie";
-    const [score, setScore] = useState(0);
+    const {score, setScore} = useUIStore();
+    const {validAnswers, setValidAnswers} = useUIStore();
+    const {setScoresTotal, setScoresGame} = useGameStore();
     const [currentAnswer, setCurrentAnswer] = useState("");
     const [puzzleLetters, setPuzzleLetters] = useState("");
-    const [validAnswers, setValidAnswers] = useState([]);
-    const {setScoresTotal, setScoresGame} = useGameStore();
+    const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
 
     useEffect(() => {
         const fetchGameData = async () => {
@@ -23,6 +23,8 @@ const GameTableUnit = () => {
                 setValidAnswers(data.correctAnswers);
                 setScoresGame(data.playerScoresGame);
                 setScoresTotal(data.playerScoresTotal);
+
+           
             } catch (error) {
                 console.error("Failed to fetchGameData()", error);
             }
@@ -41,8 +43,13 @@ const GameTableUnit = () => {
             .then((response) => {
                 const {result} = response.data;
                 if (result === "correct") {
-                    setValidAnswers([...validAnswers, currentAnswer]);
+                    setValidAnswers([...validAnswers, currentAnswer.toLowerCase()]);
                     setScore(response.data.score);
+                    setShowSuccessAnimation(true);
+
+                    setTimeout(() => {
+                        setShowSuccessAnimation(false);
+                    }, 3000);
                 }
             })
             .catch((error) => {
@@ -64,9 +71,12 @@ const GameTableUnit = () => {
 
     return (
         <div className="game_container">
+            {showSuccessAnimation && (<div className="success_lottie_top_left"><LottieSuccess /></div>)}
+            {showSuccessAnimation && (<div className="success_lottie_top_right"><LottieSuccess /></div>)}
             <div className="button_container">
                 <div className="button1">SCORE {score}</div>
             </div>
+      
             <CSSTransition
                 in={true}
                 timeout={{
@@ -78,9 +88,11 @@ const GameTableUnit = () => {
                 appear={true}
                 classNames="game-container-"
             >
+              
                 <div className="game_container_inner">
                     {puzzleLetters
-                        .toUpperCase().split("")
+                        .toUpperCase()
+                        .split("")
                         .map((char, index) => (
                             <div
                                 key={index}
