@@ -5,7 +5,6 @@ import { useGameStore, useUIStore } from "../../context/GameContext";
 const CorrectAnswersUnit = () => {
     const {puzzleAnswerList} = useGameStore();
     const {validAnswers} = useUIStore();
-    console.log("🚀 ~ CorrectAnswersUnit ~ validAnswers:", validAnswers)
     return (
         <div id="correct-answers-unit">
             <div className="answers-grid">

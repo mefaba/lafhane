@@ -76,8 +76,8 @@ public class ServerMaster {
                 gameMaster.grabPuzzleAnswersList(),
                 gameMaster.getPlayerScoresGame(),
                 gameMaster.getPlayerScoresTotal(),
-                gameMaster.getLiveData().getCorrectAnswers()
-        );
+                gameMaster.getLiveData().getCorrectAnswers(),
+                gameMaster.getLiveData().getScore());
 
         return ResponseEntity.ok(response.toJson());
     }

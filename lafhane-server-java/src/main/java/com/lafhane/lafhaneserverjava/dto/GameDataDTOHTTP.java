@@ -15,8 +15,9 @@ public class GameDataDTOHTTP  {
     private List<PlayerScorePair> playerScoresGame;
     private List<PlayerScorePair> playerScoresTotal;
     List<String> correctAnswers;
+    int score;
 
-    public GameDataDTOHTTP(String gameId, String gameState, int remainingTime, String puzzleLetters, List<String> puzzleAnswerList, List<PlayerScorePair> playerScoresGame, List<PlayerScorePair> playerScoresTotal, List<String> correctAnswers) {
+    public GameDataDTOHTTP(String gameId, String gameState, int remainingTime, String puzzleLetters, List<String> puzzleAnswerList, List<PlayerScorePair> playerScoresGame, List<PlayerScorePair> playerScoresTotal, List<String> correctAnswers, int score) {
         this.gameId = gameId;
         this.gameState = gameState;
         this.remainingTime = remainingTime;
@@ -25,6 +26,7 @@ public class GameDataDTOHTTP  {
         this.playerScoresGame = playerScoresGame;
         this.playerScoresTotal = playerScoresTotal;
         this.correctAnswers = correctAnswers;
+        this.score = score;
     }
 
 

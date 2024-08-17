@@ -7,11 +7,11 @@ import { useGameStore, useUIStore } from "../../context/GameContext.js";
 import LottieSuccess from "./LottieSuccess.js";
 
 const GameTableUnit = () => {
-    const {score, setScore} = useUIStore();
     const {validAnswers, setValidAnswers} = useUIStore();
     const {setScoresTotal, setScoresGame} = useGameStore();
     const [currentAnswer, setCurrentAnswer] = useState("");
     const [puzzleLetters, setPuzzleLetters] = useState("");
+    const [score, setScore] = useState(0);
     const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
 
     useEffect(() => {
@@ -20,11 +20,10 @@ const GameTableUnit = () => {
                 const response = await api_get_game_data();
                 const {data} = response;
                 setPuzzleLetters(data.puzzleLetters);
-                setValidAnswers(data.correctAnswers);
                 setScoresGame(data.playerScoresGame);
                 setScoresTotal(data.playerScoresTotal);
-
-           
+                setValidAnswers(data.correctAnswers); //data.correctAnswers will always be [] 
+                setScore(data.score)
             } catch (error) {
                 console.error("Failed to fetchGameData()", error);
             }
