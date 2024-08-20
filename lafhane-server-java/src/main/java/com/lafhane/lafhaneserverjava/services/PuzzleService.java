@@ -25,8 +25,9 @@ public class PuzzleService {
     @Autowired
     public  PuzzleService(MongoClient mongoClient) {
         this.collection = mongoClient.getDatabase("lafhane").getCollection("puzzles");
-        this.puzzleIndex = 20;
-        this.puzzleCount =  this.collection.countDocuments();
+        this.puzzleIndex = 50;
+        //this.puzzleCount =  this.collection.countDocuments();
+        this.puzzleCount =  4900;
     }
 
     // Methods
