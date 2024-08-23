@@ -23,6 +23,9 @@ ENTRYPOINT ["java", "-jar", "/app/LafhaneServerApp.jar"]
 #How to run this docker file to create docker image
 #docker build -t <image-name>:tagname .
 
+# Build and tag the new version
+#docker build -t my-app:latest -t my-app:v1.1.0 .
+
 #Change tag name of image
 #docker tag <existing-image> <new-image>:<new-tag>
 
