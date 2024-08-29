@@ -19,7 +19,7 @@ const HighScoreBoardTotal = () => {
     const {scoresTotal}= useGameStore(); 
     return (
         <div id="highscore_board">
-            <div className="leaderboard">
+            <div className="total_leaderboard">
                 <h2>
                     Leaderboard 
                 </h2>

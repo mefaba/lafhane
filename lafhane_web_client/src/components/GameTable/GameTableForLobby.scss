@@ -32,22 +32,6 @@
     }
   }
 
-
-/*   .game_lobby_correct_answers {
-    display: block;
-    position: absolute;
-    height: 430px;
-    width: 200px;
-    top: 15%;
-    right: 10px;
-    border-radius: 10px;
-    background-color: rgb(111, 201, 255);
-    text-align: center;
-    overflow: scroll;
-    overflow-x: hidden;
-  } */
-
-
   .game_lobby_input_answer {
     margin: 5px 25px;
     display: flex;
@@ -85,53 +69,6 @@
   }
 }
 
-.button_container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 5px 25px 0px 25px;
-  width: 300px;
-  user-select: none;
-
-  .button2 {
-    display: inline-block;
-    padding: 0.35em 1.2em;
-    border: 0.1em solid #ffffff;
-    margin: 0 0.3em 0.3em 0;
-    border-radius: 0.12em;
-    box-sizing: border-box;
-    text-decoration: none;
-    font-family: "Roboto", sans-serif;
-    font-weight: 300;
-    color: #000000;
-    text-align: center;
-    transition: all 0.2s;
-    cursor: pointer;
-
-    &:hover {
-      border-color: #000000;
-      color: #000000;
-      background-color: #999999;
-    }
-  }
-  .mobile_score {
-    display: inline-block;
-    padding: 0.35em 1.2em;
-    border: 0.1em solid #ffffff;
-    margin: 0 0.3em 0.3em 0;
-    border-radius: 0.12em;
-    box-sizing: border-box;
-    text-decoration: none;
-    font-family: "Roboto", sans-serif;
-    font-weight: 300;
-    color: #ffffff;
-    text-align: center;
-    transition: all 0.2s;
-    @media screen and (min-width: 500px) {
-      //display: none;
-    }
-  }
-}
 
 .game_lobby-container--appear {
   transform: scale(0.1);
