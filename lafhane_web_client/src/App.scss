@@ -25,7 +25,6 @@ p{
 
 .App{
   display: flex;
-  //justify-content: center;
   align-items: center;
   flex-direction: column;
   height: 100vh;
@@ -58,10 +57,12 @@ p{
 }
 
 .button_container-63 {
+  @media (max-height: 630px) {
+    flex-direction: row;
+  }
   display: flex;
   flex-direction: column;
   user-select: none;
-  width: 200px;
   gap: 10px
 }
 /* CSS */
